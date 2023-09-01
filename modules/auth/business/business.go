@@ -1,7 +1,8 @@
 package business
 
-type business struct {}
+import "context"
 
-func NewBusiness() *business {
-	return &business{}
+type Business interface {
+	Register(context.Context) error
+	Login(context.Context) error
 }
