@@ -1,24 +1,23 @@
 package repoimpl
 
 import (
+	"coffee_api/commons"
 	"coffee_api/modules/auth/entity"
 	"coffee_api/modules/auth/repository"
 	"context"
-
-	"gorm.io/gorm"
 )
 
 type authRepoImpl struct {
-	db *gorm.DB
+	appCtx commons.AppContext
 }
 
-
-func NewAuthRepoImpl(db *gorm.DB) repository.Repository {
+func NewAuthRepoImpl(appCtx commons.AppContext) repository.Repository {
 	return &authRepoImpl{
-		db: db,
+		appCtx: appCtx,
 	}
 }
 
+func (repo *authRepoImpl) Register(ctx context.Context, request entity.RegisterRequest) {
 
-func (repo *authRepoImpl) Register(ctx context.Context, request entity.RegisterRequest) {}
+}
 func (repo *authRepoImpl) Login(ctx context.Context, request entity.LoginRequest) {}
