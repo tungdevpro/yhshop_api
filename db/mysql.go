@@ -1,7 +1,14 @@
 package db
 
-import "gorm.io/gorm"
+import (
+	"coffee_api/configs"
 
-type mysqlDb struct {
-	db *gorm.DB
+	"gorm.io/driver/mysql"
+
+	"gorm.io/gorm"
+)
+
+func CreateMysqlDB(cfg *configs.Configuration) (*gorm.DB, error) {
+	db, err := gorm.Open(mysql.Open(cfg.DBConnectionURL), &gorm.Config{})
+	return db, err
 }
