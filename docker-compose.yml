@@ -6,3 +6,5 @@ services:
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=12345678aA@
+    ports:
+      - "3307:3306"
