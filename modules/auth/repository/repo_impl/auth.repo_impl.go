@@ -20,7 +20,7 @@ func NewAuthRepoImpl(appCtx commons.AppContext) auth.Repository {
 	}
 }
 
-func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterRequest) error {
+func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO) error {
 	r.appCtx.L.Lock()
 	defer r.appCtx.L.Unlock()
 
@@ -55,6 +55,6 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterReq
 	return nil
 }
 
-func (repo *authRepoImpl) Login(ctx context.Context, req *authEntity.LoginRequest) error {
+func (repo *authRepoImpl) Login(ctx context.Context, req *authEntity.LoginDTO) error {
 	return nil
 }

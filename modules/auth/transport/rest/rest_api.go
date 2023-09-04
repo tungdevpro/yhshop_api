@@ -21,7 +21,7 @@ func NewApi(biz auth.Business) *api {
 
 func (api *api) RegisterHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var data entity.RegisterRequest
+		var data entity.RegisterDTO
 
 		if err := ctx.ShouldBind(&data); err != nil {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))

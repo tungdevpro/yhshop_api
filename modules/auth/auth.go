@@ -8,13 +8,13 @@ import (
 )
 
 type Business interface {
-	Register(context.Context, *entity.RegisterRequest) error
-	Login(context.Context, *entity.LoginRequest) error
+	Register(context.Context, *entity.RegisterDTO) error
+	Login(context.Context, *entity.LoginDTO) error
 }
 
 type Repository interface {
-	Login(context.Context, *entity.LoginRequest) error
-	Register(context.Context, *entity.RegisterRequest) error
+	Login(context.Context, *entity.LoginDTO) error
+	Register(context.Context, *entity.RegisterDTO) error
 }
 
 type API interface {

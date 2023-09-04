@@ -19,7 +19,7 @@ func NewBusiness(r auth.Repository) *business {
 	}
 }
 
-func (biz *business) Register(ctx context.Context, req *entity.RegisterRequest) error {
+func (biz *business) Register(ctx context.Context, req *entity.RegisterDTO) error {
 	if err := req.Validate(); err != nil {
 		return err
 	}
@@ -40,6 +40,6 @@ func (biz *business) Register(ctx context.Context, req *entity.RegisterRequest) 
 	return nil
 }
 
-func (biz *business) Login(ctx context.Context, req *entity.LoginRequest) error {
+func (biz *business) Login(ctx context.Context, req *entity.LoginDTO) error {
 	return nil
 }

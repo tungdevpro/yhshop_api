@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-type RegisterRequest struct {
+type RegisterDTO struct {
 	FullName string `json:"fullname" form:"fullname"`
 	Email    string `json:"email" form:"email"`
 	Password string `json:"password" form:"password"`
@@ -13,12 +13,12 @@ type RegisterRequest struct {
 	Id       string `json:"id,omitempty"`
 }
 
-type LoginRequest struct {
+type LoginDTO struct {
 	Email    string `json:"email" form:"email"`
 	Password string `json:"password" form:"password"`
 }
 
-func (r *RegisterRequest) Validate() error {
+func (r *RegisterDTO) Validate() error {
 	r.Email = strings.TrimSpace(r.Email)
 	if err := isEmailAddress(r.Email); err != nil {
 		return err
