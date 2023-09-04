@@ -8,11 +8,11 @@ import (
 )
 
 type Configuration struct {
-	Port                  string `env:"PORT" envDefault:"3001"`
-	HashSalt              string `env:"HASH_SALT,required"`
-	DBConnectionURL				string `env:"DB_CONNECTION_URL,required"`
+	Port            string `env:"PORT" envDefault:"3001"`
+	HashSalt        string `env:"HASH_SALT,required"`
+	DBConnectionURL string `env:"DB_CONNECTION_URL,required"`
+	SecretKey       string `env:"SECRET_KEY,required"`
 }
-
 
 func NewConfiguration() *Configuration {
 	err := godotenv.Load()
@@ -22,6 +22,9 @@ func NewConfiguration() *Configuration {
 
 	cfg := Configuration{}
 	err = env.Parse(&cfg)
+	if err != nil {
+		helpers.Fatal(err)
+	}
 
 	return &cfg
 }

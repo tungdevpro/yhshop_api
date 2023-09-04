@@ -1,11 +1,11 @@
 package commons
 
 import (
-		"time"
+	"time"
 )
 
 type SQLModel struct {
-	Id int64 `json:"id,omitemty"`
-	CreatedAt *time.Time         `json:"created_at"`
-	UpdatedAt *time.Time         `json:"updated_at"`
+	Id        int        `json:"id,omitempty" gorm:"column:id;primary_key;"`
+	CreatedAt *time.Time `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
 }

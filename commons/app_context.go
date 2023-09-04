@@ -1,14 +1,23 @@
 package commons
 
-import "gorm.io/gorm"
+import (
+	"coffee_api/configs"
+	"sync"
+
+	"gorm.io/gorm"
+)
 
 type AppContext struct {
-	db *gorm.DB
+	db  *gorm.DB
+	L   *sync.RWMutex
+	Cfg *configs.Configuration
 }
 
-func NewAppContext(db *gorm.DB) *AppContext {
+func NewAppContext(db *gorm.DB, cfg *configs.Configuration) *AppContext {
 	return &AppContext{
-		db: db,
+		db:  db,
+		L:   new(sync.RWMutex),
+		Cfg: cfg,
 	}
 }
 
