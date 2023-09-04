@@ -4,7 +4,6 @@ import (
 	"coffee_api/modules/auth"
 	"coffee_api/modules/auth/entity"
 	"context"
-	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -34,8 +33,6 @@ func (biz *business) Register(ctx context.Context, req *entity.RegisterDTO) erro
 	if err := biz.repository.Register(ctx, req); err != nil {
 		return err
 	}
-
-	fmt.Println("req....", req)
 
 	return nil
 }

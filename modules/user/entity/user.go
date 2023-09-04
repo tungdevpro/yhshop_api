@@ -5,21 +5,42 @@ import (
 	"database/sql/driver"
 )
 
-type UserStatus string
+type StatusAllowed string
 
 const (
-	ACTIVE  UserStatus = "active"
-	BAN     UserStatus = "ban"
-	DELETED UserStatus = "deleted"
+	Suspended StatusAllowed = "suspended"
+	Active    StatusAllowed = "active"
+	Inactive  StatusAllowed = "inactive"
 )
 
-func (s *UserStatus) Scan(value interface{}) error {
-	*s = UserStatus(value.([]byte))
+func (r *StatusAllowed) Scan(value interface{}) error {
+	*r = StatusAllowed(value.([]byte))
 	return nil
 }
 
-func (s UserStatus) Value() (driver.Value, error) {
-	return string(s), nil
+func (r StatusAllowed) Value() (driver.Value, error) {
+	return string(r), nil
+}
+
+type RoleAllowed string
+
+const (
+	admin  RoleAllowed = "admin"
+	seller RoleAllowed = "seller"
+	rider  RoleAllowed = "rider"
+	member RoleAllowed = "member"
+)
+
+func (st *RoleAllowed) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		*st = RoleAllowed(b)
+	}
+	return nil
+}
+
+func (st RoleAllowed) Value() (driver.Value, error) {
+	return string(st), nil
 }
 
 type User struct {
@@ -29,8 +50,12 @@ type User struct {
 	Phone             string         `json:"phone" gorm:"column:phone;"`
 	Address           string         `json:"address" gorm:"column:address;"`
 	Avatar            *commons.Image `json:"avatar" gorm:"column:avatar;"`
-	Status            UserStatus     `json:"status" gorm:"column:status;"`
-	AccessToken       string         `json:"access_token" gorm:"column:access_token;"`
+	Status            StatusAllowed  `json:"status" gorm:"column:status;type:ENUM('active','suspended','inactive');default:'active'"`
+	Role              RoleAllowed    `json:"role" gorm:"column:role;type:ENUM('admin','seller','rider','member');default:'member'"`
+	// OTPCode
+	// IsEmailVerified bool           `json:"is_email_verified" gorm:"default:false"`
+
+	AccessToken string `json:"access_token" gorm:"column:access_token;"`
 }
 
 func (u *User) TableName() string {

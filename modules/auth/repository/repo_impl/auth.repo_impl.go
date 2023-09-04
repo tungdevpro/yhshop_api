@@ -8,6 +8,8 @@ import (
 	userEntity "coffee_api/modules/user/entity"
 	"context"
 	"errors"
+
+	"gorm.io/gorm"
 )
 
 type authRepoImpl struct {
@@ -25,32 +27,33 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 	defer r.appCtx.L.Unlock()
 
 	user := userEntity.User{
-		Email:    req.Email,
-		FullName: req.FullName,
-		Status:   userEntity.ACTIVE,
+		Email: req.Email,
 	}
 	db := r.appCtx.GetDB()
 
-	if err := db.First(&user, "email = ?", user.Email).Error; err != nil {
-		if err := db.Create(&user).Error; err != nil {
-			return err
+	result := db.Where(&user).First(&user)
+
+	if result.Error != nil || result.RowsAffected == 0 {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			if err := db.Create(&user).Error; err != nil {
+				return err
+			}
+			token, err := middleware.GenToken(r.appCtx.Cfg, middleware.JwtPayload{
+				UserId: user.Id,
+				Role:   "Member",
+			})
+			if err != nil {
+				return err
+			}
+			req.Token = token
+			return nil
 		}
-		return err
+		return result.Error
 	}
 
 	if user.Id != 0 {
 		return errors.New(commons.ErrUserIsExist)
 	}
-
-	token, err := middleware.GenToken(r.appCtx.Cfg, middleware.JwtPayload{
-		UserId: user.Id,
-		Role:   "Member",
-	})
-	if err != nil {
-		return err
-	}
-
-	req.Token = token
 
 	return nil
 }
