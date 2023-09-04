@@ -6,11 +6,12 @@ import (
 )
 
 type RegisterDTO struct {
-	FullName string `json:"fullname" form:"fullname"`
-	Email    string `json:"email" form:"email"`
-	Password string `json:"password" form:"password"`
-	Token    string `json:"token,omitempty"`
-	Id       string `json:"id,omitempty"`
+	FullName        string `json:"fullname" form:"fullname"`
+	Email           string `json:"email" form:"email"`
+	Password        string `json:"password" form:"password"`
+	PasswordConfirm string `json:"password_confirm" form:"password_confirm"`
+	Token           string `json:"token,omitempty"`
+	Id              string `json:"id,omitempty"`
 }
 
 type LoginDTO struct {
