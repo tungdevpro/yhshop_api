@@ -40,7 +40,7 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 			}
 			token, err := middleware.GenToken(r.appCtx.Cfg, middleware.JwtPayload{
 				UserId: user.Id,
-				Role:   "Member",
+				Role:   string(userEntity.Member),
 			})
 			if err != nil {
 				return err
