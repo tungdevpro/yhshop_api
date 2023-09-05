@@ -22,27 +22,6 @@ func (r StatusAllowed) Value() (driver.Value, error) {
 	return string(r), nil
 }
 
-type RoleAllowed string
-
-const (
-	admin  RoleAllowed = "admin"
-	Seller RoleAllowed = "seller"
-	Rider  RoleAllowed = "rider"
-	Member RoleAllowed = "member"
-)
-
-func (st *RoleAllowed) Scan(value interface{}) error {
-	b, ok := value.([]byte)
-	if !ok {
-		*st = RoleAllowed(b)
-	}
-	return nil
-}
-
-func (st RoleAllowed) Value() (driver.Value, error) {
-	return string(st), nil
-}
-
 type User struct {
 	*commons.SQLModel `json:",inline"`
 	FullName          string         `json:"fullname" gorm:"column:fullname;"`
@@ -52,8 +31,8 @@ type User struct {
 	Avatar            *commons.Image `json:"avatar" gorm:"column:avatar;"`
 	Status            StatusAllowed  `json:"status" gorm:"column:status;type:ENUM('active','suspended','inactive');default:'active'"`
 	Role              RoleAllowed    `json:"role" gorm:"column:role;type:ENUM('admin','seller','rider','member');default:'member'"`
-	// OTPCode           int            `json:"otp_code"`
-	IsEmailVerified bool `json:"is_email_verified" gorm:"column:is_email_verified;default:false"`
+	OTPCode           int            `json:"otp_code" gorm:"column:otp_code"`
+	IsEmailVerified   bool           `json:"is_email_verified" gorm:"column:is_email_verified;default:false"`
 
 	AccessToken string `json:"access_token" gorm:"column:access_token;"`
 }
