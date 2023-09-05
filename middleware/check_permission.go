@@ -1,1 +1,3 @@
 package middleware
+
+func CheckPermission() {}

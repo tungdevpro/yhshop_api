@@ -35,17 +35,17 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 
 	if result.Error != nil || result.RowsAffected == 0 {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			if err := db.Create(&user).Error; err != nil {
-				return err
-			}
-			token, err := middleware.GenToken(r.appCtx.Cfg, middleware.JwtPayload{
-				UserId: user.Id,
-				Role:   string(userEntity.Member),
+			accessToken, err := middleware.GenToken(r.appCtx.Cfg, middleware.JwtPayload{
+				Email: user.Email,
+				Role:  string(userEntity.Member),
 			})
 			if err != nil {
 				return err
 			}
-			req.Token = token
+			user.AccessToken = accessToken
+			if err := db.Create(&user).Error; err != nil {
+				return err
+			}
 			return nil
 		}
 		return result.Error
