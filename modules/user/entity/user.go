@@ -3,6 +3,8 @@ package entity
 import (
 	"coffee_api/commons"
 	"database/sql/driver"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type StatusAllowed string
@@ -33,10 +35,24 @@ type User struct {
 	Role              RoleAllowed    `json:"role" gorm:"column:role;type:ENUM('admin','seller','rider','member');default:'member'"`
 	OTPCode           int            `json:"otp_code" gorm:"column:otp_code"`
 	IsEmailVerified   bool           `json:"is_email_verified" gorm:"column:is_email_verified;default:false"`
+	Password          []byte         `gorm:"not null" json:"-"`
 
 	AccessToken string `json:"access_token" gorm:"column:access_token;"`
 }
 
 func (u *User) TableName() string {
 	return "users"
+}
+
+func (user *User) SetPassword(password string) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	user.Password = hashedPassword
+	return nil
+}
+
+func (user *User) VerifyPassword(password string) error {
+	return bcrypt.CompareHashAndPassword(user.Password, []byte(password))
 }
