@@ -12,6 +12,11 @@ type Configuration struct {
 	HashSalt        string `env:"HASH_SALT,required"`
 	DBConnectionURL string `env:"DB_CONNECTION_URL,required"`
 	SecretKey       string `env:"SECRET_KEY,required"`
+	S3BucketName    string `env:"S3_BUCKET_NAME,required"`
+	S3Region        string `env:"S3_REGION,required"`
+	S3ApiKey        string `env:"S3_API_KEY,required"`
+	S3SecretKey     string `env:"s3_SECRET_KEY,required"`
+	S3Domain        string `env:"S3_DOMAIN,required"`
 }
 
 func NewConfiguration() *Configuration {

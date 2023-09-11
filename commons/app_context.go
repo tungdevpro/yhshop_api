@@ -11,6 +11,7 @@ type AppContext struct {
 	db  *gorm.DB
 	L   *sync.RWMutex
 	Cfg *configs.Configuration
+	// upProvider uploadprovider.UploadProvider
 }
 
 func NewAppContext(db *gorm.DB, cfg *configs.Configuration) *AppContext {
@@ -18,6 +19,7 @@ func NewAppContext(db *gorm.DB, cfg *configs.Configuration) *AppContext {
 		db:  db,
 		L:   new(sync.RWMutex),
 		Cfg: cfg,
+		// upProvider: upProvider,
 	}
 }
 
