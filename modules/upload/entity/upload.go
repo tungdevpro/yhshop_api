@@ -4,4 +4,5 @@ type UploadDTO struct {
 	Data     []byte
 	Folder   string
 	FileName string
+	Dst      string
 }

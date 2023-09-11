@@ -13,6 +13,7 @@ type Image struct {
 	Width     int    `json:"width"`
 	Height    int    `json:"height"`
 	CloudName string `json:"cloud_name"`
+	Extension string `json:"extension"`
 }
 
 func (Image) TableName() string {

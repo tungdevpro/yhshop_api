@@ -40,11 +40,14 @@ func (api *api) UploadFile() gin.HandlerFunc {
 			panic(err)
 		}
 
-		img, err := api.biz.UploadFile(ctx.Request.Context(), &entity.UploadDTO{
+		doc := entity.UploadDTO{
 			Data:     dataBytes,
 			Folder:   folder,
 			FileName: fileHeader.Filename,
-		})
+			// Dst:      fmt.Sprintf("%s/%s", folder, fileHeader.Filename),
+		}
+
+		img, err := api.biz.UploadFile(ctx.Request.Context(), &doc)
 
 		if err != nil {
 			panic(err)

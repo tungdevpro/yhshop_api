@@ -53,7 +53,7 @@ func (provider *s3Provider) SaveFileUploaded(ctx context.Context, uploadDto *ent
 
 	_, err := s3.New(provider.session).PutObject(&s3.PutObjectInput{
 		Bucket:      aws.String(provider.bucketName),
-		Key:         aws.String(uploadDto.Folder),
+		Key:         aws.String(uploadDto.Dst),
 		ACL:         aws.String("private"),
 		ContentType: aws.String(fileType),
 		Body:        fileBytes,
@@ -64,9 +64,11 @@ func (provider *s3Provider) SaveFileUploaded(ctx context.Context, uploadDto *ent
 	}
 
 	img := &commons.Image{
-		Url:       fmt.Sprintf("%s/%s", provider.domain, uploadDto.Folder),
+		Url:       uploadDto.Dst,
 		CloudName: "s3",
 	}
+
+	fmt.Println("img:: ", img)
 
 	return img, nil
 }
