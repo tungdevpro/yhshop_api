@@ -12,7 +12,7 @@ type business struct {
 	repository auth.Repository
 }
 
-func NewBusiness(r auth.Repository) *business {
+func NewBusiness(r auth.Repository) auth.Business {
 	return &business{
 		repository: r,
 	}

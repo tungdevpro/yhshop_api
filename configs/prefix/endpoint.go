@@ -5,4 +5,6 @@ const (
 	Auth     = "/auth"
 	Login    = "/login"
 	Register = "/register"
+
+	Upload = "/upload"
 )
