@@ -14,12 +14,26 @@ type RegisterDTO struct {
 	Id              string `json:"id,omitempty"`
 }
 
+func (r *RegisterDTO) Validate() error {
+	r.Email = strings.TrimSpace(r.Email)
+	if err := isEmailAddress(r.Email); err != nil {
+		return err
+	}
+
+	r.Password = strings.TrimSpace(r.Password)
+	if len(r.Password) < 6 {
+		return ErrorPasswordLength
+	}
+
+	return nil
+}
+
 type LoginDTO struct {
 	Email    string `json:"email" form:"email"`
 	Password string `json:"password" form:"password"`
 }
 
-func (r *RegisterDTO) Validate() error {
+func (r *LoginDTO) Validate() error {
 	r.Email = strings.TrimSpace(r.Email)
 	if err := isEmailAddress(r.Email); err != nil {
 		return err

@@ -38,5 +38,8 @@ func (biz *business) Register(ctx context.Context, req *entity.RegisterDTO) erro
 }
 
 func (biz *business) Login(ctx context.Context, req *entity.LoginDTO) error {
+	if err := req.Validate(); err != nil {
+		return err
+	}
 	return nil
 }

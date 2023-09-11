@@ -4,6 +4,7 @@ import (
 	"coffee_api/commons"
 	"coffee_api/modules/auth"
 	"coffee_api/modules/auth/entity"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -38,8 +39,20 @@ func (api *api) RegisterHandler() gin.HandlerFunc {
 }
 func (api *api) LoginHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"id": "",
-		})
+		var dto entity.LoginDTO
+
+		if err := ctx.ShouldBind(&dto); err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
+		}
+
+		if err := api.biz.Login(ctx.Request.Context(), &dto); err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
+		}
+
+		fmt.Println("dto: ", dto)
+
+		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(nil))
 	}
 }

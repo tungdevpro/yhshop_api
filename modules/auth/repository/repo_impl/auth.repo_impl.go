@@ -30,7 +30,6 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 		Email: req.Email,
 	}
 	db := r.appCtx.GetDB()
-
 	result := db.Where(&user).First(&user)
 
 	if result.Error != nil || result.RowsAffected == 0 {
@@ -58,6 +57,20 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 	return nil
 }
 
-func (repo *authRepoImpl) Login(ctx context.Context, req *authEntity.LoginDTO) error {
+func (r *authRepoImpl) Login(ctx context.Context, loginDto *authEntity.LoginDTO) error {
+	r.appCtx.L.Lock()
+	defer r.appCtx.L.Unlock()
+
+	user := userEntity.User{
+		Email: loginDto.Email,
+	}
+
+	db := r.appCtx.GetDB()
+	result := db.Where(&user).First(&user)
+
+	if result.Error != nil || result.RowsAffected == 0 {
+
+	}
+
 	return nil
 }
