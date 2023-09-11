@@ -22,7 +22,7 @@ func (r *RegisterDTO) Validate() error {
 
 	r.Password = strings.TrimSpace(r.Password)
 	if len(r.Password) < 6 {
-		return ErrorPasswordLength
+		return ErrPasswordLength
 	}
 
 	return nil
@@ -41,7 +41,7 @@ func (r *LoginDTO) Validate() error {
 
 	r.Password = strings.TrimSpace(r.Password)
 	if len(r.Password) < 6 {
-		return ErrorPasswordLength
+		return ErrPasswordLength
 	}
 
 	return nil

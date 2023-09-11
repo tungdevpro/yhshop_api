@@ -69,7 +69,11 @@ func (r *authRepoImpl) Login(ctx context.Context, loginDto *authEntity.LoginDTO)
 	result := db.Where(&user).First(&user)
 
 	if result.Error != nil || result.RowsAffected == 0 {
+		return authEntity.ErrUnauthorized
+	}
 
+	if err := user.VerifyPassword(loginDto.Password); err != nil {
+		return authEntity.ErrUnauthorized
 	}
 
 	return nil
