@@ -2,6 +2,6 @@ package entity
 
 import "coffee_api/commons"
 
-type Rider struct {
+type Shipper struct {
 	*commons.SQLModel `json:",inline"`
 }
