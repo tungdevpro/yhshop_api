@@ -6,7 +6,6 @@ import (
 	"coffee_api/helpers"
 	"coffee_api/modules/upload/entity"
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -67,8 +66,6 @@ func (provider *s3Provider) SaveFileUploaded(ctx context.Context, uploadDto *ent
 		Url:       uploadDto.Dst,
 		CloudName: "s3",
 	}
-
-	fmt.Println("img:: ", img)
 
 	return img, nil
 }

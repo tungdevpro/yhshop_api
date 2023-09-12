@@ -32,7 +32,7 @@ type User struct {
 	Address           string         `json:"address" gorm:"column:address;"`
 	Avatar            *commons.Image `json:"avatar" gorm:"column:avatar;"`
 	Status            StatusAllowed  `json:"status" gorm:"column:status;type:ENUM('active','suspended','inactive');default:'active'"`
-	Role              RoleAllowed    `json:"role" gorm:"column:role;type:ENUM('admin','seller','rider','member');default:'member'"`
+	Role              RoleAllowed    `json:"role" gorm:"column:role;type:ENUM('admin','seller','shipper','member');default:'member'"`
 	OTPCode           int            `json:"otp_code" gorm:"column:otp_code"`
 	IsEmailVerified   bool           `json:"is_email_verified" gorm:"column:is_email_verified;default:false"`
 	Password          []byte         `gorm:"not null" json:"-"`

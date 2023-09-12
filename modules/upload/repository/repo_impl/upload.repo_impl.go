@@ -6,6 +6,8 @@ import (
 	"coffee_api/modules/upload/entity"
 	"coffee_api/modules/upload/uploadprovider"
 	"context"
+	"fmt"
+	"strings"
 )
 
 type uploadRepoImpl struct {
@@ -26,5 +28,7 @@ func (impl *uploadRepoImpl) UploadFile(ctx context.Context, uploadDto *entity.Up
 	if err != nil {
 		return nil, err
 	}
+
+	img.Url = fmt.Sprintf("%s/%s", strings.TrimSpace(cfg.S3Domain), strings.TrimSpace(img.Url))
 	return img, nil
 }

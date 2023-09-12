@@ -5,10 +5,10 @@ import "database/sql/driver"
 type RoleAllowed string
 
 const (
-	admin  RoleAllowed = "admin"
-	Seller RoleAllowed = "seller"
-	Rider  RoleAllowed = "rider"
-	Member RoleAllowed = "member"
+	admin   RoleAllowed = "admin"
+	Seller  RoleAllowed = "seller"
+	Shipper RoleAllowed = "shipper"
+	Member  RoleAllowed = "member"
 )
 
 func (st *RoleAllowed) Scan(value interface{}) error {
