@@ -28,6 +28,10 @@ func (api *api) CreateShopHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {}
 }
 
+func (api *api) UpdateShopHandler() gin.HandlerFunc {
+	return func(ctx *gin.Context) {}
+}
+
 func (api *api) DeleteShopHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {}
 }

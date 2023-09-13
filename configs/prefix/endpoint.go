@@ -9,9 +9,9 @@ const (
 	UserProfile = "/user/profile"
 
 	Upload = "/upload"
-	
-	Shop = "/shop"
+
+	// Shop = "/shop"
 	ListShop = "/shops"
-	GetShop = "/shop/:id"
-	DelShop = "/shop/:id"
+	GetShop  = "/shop/:id"
+	DelShop  = "/shop/:id"
 )
