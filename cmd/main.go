@@ -10,6 +10,10 @@ import (
 	implAuth "coffee_api/modules/auth/repository/repo_impl"
 	restAuth "coffee_api/modules/auth/transport/rest"
 
+	bizUser "coffee_api/modules/user/business"
+	implUser "coffee_api/modules/user/repository/repo_impl"
+	restUser "coffee_api/modules/user/transport/rest"
+
 	bizShop "coffee_api/modules/shop/business"
 	implShop "coffee_api/modules/shop/repository/repo_impl"
 	restShop "coffee_api/modules/shop/transport/rest"
@@ -31,8 +35,9 @@ func main() {
 	}
 
 	appCtx := commons.NewAppContext(db, cfg)
-	apiAuth := restAuth.NewApi(bizAuth.NewBusiness(implAuth.NewAuthRepoImpl(*appCtx)))
 	apiUpload := restUpload.NewApi(bizUpload.NewBusiness(implUpload.NewUploadRepoImpl(*appCtx)))
+	apiAuth := restAuth.NewApi(bizAuth.NewBusiness(implAuth.NewAuthRepoImpl(*appCtx)))
+	apiUser := restUser.NewApi(bizUser.NewBusiness(implUser.NewUserRepoImpl(*appCtx)))
 	apiShop := restShop.NewApi(bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx)))
 
 	engine := gin.Default()
@@ -44,8 +49,18 @@ func main() {
 
 		// Authentication handler
 		auth := v1.Group(prefix.Auth)
-		auth.POST(prefix.Register, apiAuth.RegisterHandler())
-		auth.POST(prefix.Login, apiAuth.LoginHandler())
+		{
+			auth.POST(prefix.Register, apiAuth.RegisterHandler())
+			auth.POST(prefix.Login, apiAuth.LoginHandler())
+		}
+
+		// User handler
+		user := v1.Group(prefix.User)
+		{
+			user.GET(prefix.Profile, apiUser.GetProfileHandler())
+			user.PUT(prefix.Empty, apiUser.UpdateProfileHandler())
+			user.DELETE(prefix.Empty, apiUser.DeleteUserHandler())
+		}
 
 		// Shop handler
 		v1.GET(prefix.ListShop, apiShop.ListShopHandler())

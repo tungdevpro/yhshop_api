@@ -1,13 +1,20 @@
 package prefix
 
 const (
-	V1       = "/v1"
+	V1    = "/v1"
+	Empty = ""
+
+	// Authentication
 	Auth     = "/auth"
 	Login    = "/login"
 	Register = "/register"
 
-	UserProfile = "/user/profile"
+	// User
 
+	User    = "/user"
+	Profile = "/profile"
+
+	// Upload
 	Upload = "/upload"
 
 	// Shop = "/shop"

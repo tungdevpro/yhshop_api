@@ -7,10 +7,11 @@ import (
 )
 
 type api struct {
+	biz user.Business
 }
 
-func NewApi() user.API {
-	return &api{}
+func NewApi(biz user.Business) user.API {
+	return &api{biz: biz}
 }
 
 func (api *api) GetProfileHandler() gin.HandlerFunc {
