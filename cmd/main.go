@@ -37,9 +37,14 @@ func main() {
 	{
 		v1.POST(prefix.Upload, apiUpload.UploadFile())
 
+		// Authentication
 		auth := v1.Group(prefix.Auth)
 		auth.POST(prefix.Register, apiAuth.RegisterHandler())
 		auth.POST(prefix.Login, apiAuth.LoginHandler())
+		
+		// Shop
+
+		
 	}
 
 	if err := engine.Run(fmt.Sprintf(":%s", cfg.Port)); err != nil {

@@ -1,4 +1,4 @@
-package restaurants
+package shop
 
 import (
 	"context"

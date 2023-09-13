@@ -4,7 +4,6 @@ import (
 	"coffee_api/commons"
 	"coffee_api/modules/auth"
 	"coffee_api/modules/auth/entity"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +13,7 @@ type api struct {
 	biz auth.Business
 }
 
-func NewApi(biz auth.Business) *api {
+func NewApi(biz auth.Business) auth.API {
 	return &api{
 		biz: biz,
 	}
@@ -50,8 +49,6 @@ func (api *api) LoginHandler() gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
 			return
 		}
-
-		fmt.Println("dto: ", dto)
 
 		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(nil))
 	}
