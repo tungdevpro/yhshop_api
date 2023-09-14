@@ -2,6 +2,7 @@ package entity
 
 import (
 	"net/mail"
+	"regexp"
 	"strings"
 )
 
@@ -25,6 +26,13 @@ func (r *RegisterDTO) Validate() error {
 		return ErrPasswordLength
 	}
 
+	r.FullName = strings.TrimSpace(r.FullName)
+	if len(r.FullName) != 0 {
+		regex := regexp.MustCompile("^[a-zA-Z]+$")
+		if err := regex.MatchString(r.FullName); !err {
+			return ErrFullNameInvalid
+		}
+	}
 	return nil
 }
 

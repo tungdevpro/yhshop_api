@@ -4,6 +4,7 @@ import (
 	"coffee_api/modules/auth"
 	"coffee_api/modules/auth/entity"
 	"context"
+	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -41,5 +42,12 @@ func (biz *business) Login(ctx context.Context, req *entity.LoginDTO) error {
 	if err := req.Validate(); err != nil {
 		return err
 	}
+
+	if err := biz.repository.Login(ctx, req); err != nil {
+		return err
+	}
+
+	fmt.Println("this login: ", req)
+
 	return nil
 }
