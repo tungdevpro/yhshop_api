@@ -44,6 +44,7 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 			user.AccessToken = accessToken
 			user.Email = req.Email
 			user.FullName = req.FullName
+			user.Password = req.Password
 			if err := db.Create(&user).Error; err != nil {
 				return err
 			}

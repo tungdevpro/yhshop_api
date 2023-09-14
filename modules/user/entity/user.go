@@ -35,7 +35,7 @@ type User struct {
 	Role              RoleAllowed    `json:"role" gorm:"column:role;type:ENUM('admin','seller','shipper','member');default:'member'"`
 	OTPCode           int            `json:"otp_code" gorm:"column:otp_code"`
 	IsEmailVerified   bool           `json:"is_email_verified" gorm:"column:is_email_verified;default:false"`
-	Password          []byte         `gorm:"not null" json:"-"`
+	Password          string         `gorm:"column:password;" json:"-"`
 
 	AccessToken string `json:"access_token" gorm:"column:access_token;"`
 }
@@ -49,10 +49,10 @@ func (user *User) SetPassword(password string) error {
 	if err != nil {
 		return err
 	}
-	user.Password = hashedPassword
+	user.Password = string(hashedPassword)
 	return nil
 }
 
 func (user *User) VerifyPassword(password string) error {
-	return bcrypt.CompareHashAndPassword(user.Password, []byte(password))
+	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 }
