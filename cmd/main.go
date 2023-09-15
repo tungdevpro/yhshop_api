@@ -63,11 +63,15 @@ func main() {
 		}
 
 		// Shop handler
+		shop := v1.Group(prefix.Shop)
+		{
+			shop.POST(prefix.Empty, apiShop.CreateShopHandler())
+			shop.GET(prefix.GetShop, apiShop.GetShopHandler())
+			shop.PUT(prefix.GetShop, apiShop.UpdateShopHandler())
+			shop.DELETE(prefix.DelShop, apiShop.DeleteShopHandler())
+		}
 		v1.GET(prefix.ListShop, apiShop.ListShopHandler())
-		v1.POST(prefix.ListShop, apiShop.CreateShopHandler())
-		v1.GET(prefix.GetShop, apiShop.GetShopHandler())
-		v1.PUT(prefix.GetShop, apiShop.UpdateShopHandler())
-		v1.DELETE(prefix.DelShop, apiShop.DeleteShopHandler())
+
 	}
 
 	if err := engine.Run(fmt.Sprintf(":%s", cfg.Port)); err != nil {
