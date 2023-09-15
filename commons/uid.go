@@ -31,25 +31,24 @@ func Decode(s string) []byte {
 	return data
 }
 
-func Encrypt(text, MySecret string) (string, error) {
+func (u *UID) Encrypt() (string, error) {
 	block, err := aes.NewCipher([]byte(MySecret))
 	if err != nil {
 		return "", err
 	}
-	plainText := []byte(text)
+	plainText := []byte(string(rune(u.Id)))
 	cfb := cipher.NewCFBEncrypter(block, bytes)
 	cipherText := make([]byte, len(plainText))
 	cfb.XORKeyStream(cipherText, plainText)
 	return Encode(cipherText), nil
 }
 
-// Decrypt method is to extract back the encrypted text
-func Decrypt(text, MySecret string) (string, error) {
+func (u *UID) Decrypt() (string, error) {
 	block, err := aes.NewCipher([]byte(MySecret))
 	if err != nil {
 		return "", err
 	}
-	cipherText := Decode(text)
+	cipherText := Decode(string(rune(u.Id)))
 	cfb := cipher.NewCFBDecrypter(block, bytes)
 	plainText := make([]byte, len(cipherText))
 	cfb.XORKeyStream(plainText, cipherText)
