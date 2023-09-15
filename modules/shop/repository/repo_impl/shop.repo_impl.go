@@ -21,5 +21,7 @@ func (impl *shopRepoImpl) GetListShop(ctx context.Context) {}
 func (impl *shopRepoImpl) GetShopById(ctx context.Context) (entity.Shop, error) {
 	return entity.Shop{}, nil
 }
-func (impl *shopRepoImpl) CreateShop(ctx context.Context) {}
+func (impl *shopRepoImpl) CreateShop(ctx context.Context, dto *entity.CreateShopDTO) (string, error) {
+	return "", nil
+}
 func (impl *shopRepoImpl) DeleteShop(ctx context.Context) {}

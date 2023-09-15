@@ -10,14 +10,14 @@ import (
 type Business interface {
 	GetListShop(context.Context)
 	GetShopById(context.Context) (entity.Shop, error)
-	CreateShop(context.Context)
+	CreateShop(context.Context, *entity.CreateShopDTO) (string, error)
 	DeleteShop(context.Context)
 }
 
 type Repository interface {
 	GetListShop(context.Context)
 	GetShopById(context.Context) (entity.Shop, error)
-	CreateShop(context.Context)
+	CreateShop(context.Context, *entity.CreateShopDTO) (string, error)
 	DeleteShop(context.Context)
 }
 

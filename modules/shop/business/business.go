@@ -18,5 +18,7 @@ func (biz *business) GetListShop(ctx context.Context) {}
 func (biz *business) GetShopById(ctx context.Context) (entity.Shop, error) {
 	return entity.Shop{}, nil
 }
-func (biz *business) CreateShop(ctx context.Context) {}
+func (biz *business) CreateShop(ctx context.Context, dto *entity.CreateShopDTO) (string, error) {
+	return "", nil
+}
 func (biz *business) DeleteShop(ctx context.Context) {}
