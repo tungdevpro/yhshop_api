@@ -1,7 +1,10 @@
 package rest
 
 import (
+	"coffee_api/commons"
 	"coffee_api/modules/shop"
+	"coffee_api/modules/shop/entity"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +28,23 @@ func (api *api) GetShopHandler() gin.HandlerFunc {
 }
 
 func (api *api) CreateShopHandler() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
+	return func(ctx *gin.Context) {
+		var dto entity.CreateShopDTO
+
+		if err := ctx.ShouldBind(&dto); err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
+		}
+
+		result, err := api.biz.CreateShop(ctx.Request.Context(), &dto)
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
+		}
+
+		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(result))
+
+	}
 }
 
 func (api *api) UpdateShopHandler() gin.HandlerFunc {

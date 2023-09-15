@@ -31,6 +31,7 @@ func Decode(s string) []byte {
 	return data
 }
 
+// Hàm encrypt uuid
 func (u *UID) Encrypt() (string, error) {
 	block, err := aes.NewCipher([]byte(MySecret))
 	if err != nil {
@@ -43,6 +44,7 @@ func (u *UID) Encrypt() (string, error) {
 	return Encode(cipherText), nil
 }
 
+// Hàm decrypt uuid
 func (u *UID) Decrypt() (string, error) {
 	block, err := aes.NewCipher([]byte(MySecret))
 	if err != nil {
