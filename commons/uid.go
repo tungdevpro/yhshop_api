@@ -4,6 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
+	"fmt"
 )
 
 const MySecret string = "abc&1*~#^2^#s0^=)^^7%b34"
@@ -55,4 +56,8 @@ func (u *UID) Decrypt() (string, error) {
 	plainText := make([]byte, len(cipherText))
 	cfb.XORKeyStream(plainText, cipherText)
 	return string(plainText), nil
+}
+
+func (uid UID) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("\"%v\"", uid)), nil
 }
