@@ -1,7 +1,6 @@
 package commons
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -16,11 +15,5 @@ func (sql *SQLModel) GenUID() {
 	uid := UID{
 		Id: sql.Id,
 	}
-
-	uid.Encrypt()
-
 	sql.Uid = &uid
-	e, _ := sql.Uid.MarshalJSON()
-
-	fmt.Println("22....", e)
 }

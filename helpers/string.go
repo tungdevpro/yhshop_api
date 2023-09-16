@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+var (
+	Letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+)
+
 func SnakeCase(text string) string {
 	// Chuyển đổi thành chữ thường
 	text = strings.ToLower(text)

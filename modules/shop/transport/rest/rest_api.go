@@ -20,7 +20,9 @@ func NewApi(biz shop.Business) shop.API {
 }
 
 func (api *api) ListShopHandler() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
+	return func(ctx *gin.Context) {
+
+	}
 }
 
 func (api *api) GetShopHandler() gin.HandlerFunc {
