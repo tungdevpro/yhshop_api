@@ -18,7 +18,9 @@ func NewShopRepoImpl(appCtx commons.AppContext) shop.Repository {
 	}
 }
 
-func (impl *shopRepoImpl) GetListShop(ctx context.Context) {}
+func (impl *shopRepoImpl) GetListShop(ctx context.Context, filter *entity.Filter, page *commons.Paging) ([]entity.Shop, error) {
+	return []entity.Shop{}, nil
+}
 func (impl *shopRepoImpl) GetShopById(ctx context.Context) (entity.Shop, error) {
 	return entity.Shop{}, nil
 }

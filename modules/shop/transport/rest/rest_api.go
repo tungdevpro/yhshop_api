@@ -21,7 +21,22 @@ func NewApi(biz shop.Business) shop.API {
 
 func (api *api) ListShopHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		var filter entity.Filter
 
+		if err := ctx.ShouldBind(&filter); err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
+		}
+
+		// items, err := api.biz.GetListShop(ctx.Request.Context(), &filter)
+		// if err != nil {
+		// 	ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+		// 	return
+		// }
+
+		// fmt.Println("items: ", items)
+
+		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(nil))
 	}
 }
 

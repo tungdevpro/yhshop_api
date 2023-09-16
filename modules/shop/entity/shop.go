@@ -16,3 +16,8 @@ type Shop struct {
 func (s *Shop) Mask(isOwner bool) {
 	s.GenUID()
 }
+
+type Filter struct {
+	IsVerify int `json:"is_verify" form:"is_verify"`
+	Status   int `json:"status" form:"status"`
+}

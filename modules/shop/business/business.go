@@ -1,6 +1,7 @@
 package business
 
 import (
+	"coffee_api/commons"
 	"coffee_api/modules/shop"
 	"coffee_api/modules/shop/entity"
 	"context"
@@ -15,7 +16,12 @@ func NewBusiness(repo shop.Repository) shop.Business {
 	return &business{repo: repo}
 }
 
-func (biz *business) GetListShop(ctx context.Context) {}
+func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, page *commons.Paging) ([]entity.Shop, error) {
+
+	// items, err := biz.repo.GetListShop(ctx, filter)
+
+	return []entity.Shop{}, nil
+}
 func (biz *business) GetShopById(ctx context.Context) (entity.Shop, error) {
 	return entity.Shop{}, nil
 }
