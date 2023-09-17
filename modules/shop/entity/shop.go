@@ -19,10 +19,10 @@ func (Shop) TableName() string {
 	return "shops"
 }
 func (s *Shop) Mask(isOwner bool) {
-	s.GenUID()
+	s.GenerateID()
 }
 
 type Filter struct {
-	IsVerify int `json:"is_verify" form:"is_verify"`
-	Status   int `json:"status" form:"status"`
+	IsVerify int `json:"is_verify,omitempty" form:"is_verify"`
+	Status   int `json:"status,omitempty" form:"status"`
 }

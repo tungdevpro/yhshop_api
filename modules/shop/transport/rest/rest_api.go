@@ -4,6 +4,7 @@ import (
 	"coffee_api/commons"
 	"coffee_api/modules/shop"
 	"coffee_api/modules/shop/entity"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -42,7 +43,9 @@ func (api *api) ListShopHandler() gin.HandlerFunc {
 }
 
 func (api *api) GetShopHandler() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
+	return func(ctx *gin.Context) {
+		fmt.Println("oki: ", ctx.Param("id"))
+	}
 }
 
 func (api *api) CreateShopHandler() gin.HandlerFunc {

@@ -10,16 +10,16 @@ import (
 
 type Business interface {
 	GetListShop(context.Context, *entity.Filter, *commons.Paging) ([]entity.Shop, error)
-	GetShopById(context.Context) (entity.Shop, error)
+	GetShopById(context.Context, string) (entity.Shop, error)
 	CreateShop(context.Context, *entity.CreateShopDTO) (string, error)
-	DeleteShop(context.Context)
+	DeleteShop(context.Context, string) bool
 }
 
 type Repository interface {
 	GetListShop(context.Context, *entity.Filter, *commons.Paging) ([]entity.Shop, error)
-	GetShopById(context.Context) (entity.Shop, error)
+	GetShopById(context.Context, string) (entity.Shop, error)
 	CreateShop(context.Context, *entity.CreateShopDTO) (string, error)
-	DeleteShop(context.Context)
+	DeleteShop(context.Context, string) bool
 }
 
 type API interface {

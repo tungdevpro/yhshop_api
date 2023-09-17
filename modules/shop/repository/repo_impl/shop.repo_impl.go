@@ -35,7 +35,7 @@ func (impl *shopRepoImpl) GetListShop(ctx context.Context, filter *entity.Filter
 
 	return items, nil
 }
-func (impl *shopRepoImpl) GetShopById(ctx context.Context) (entity.Shop, error) {
+func (impl *shopRepoImpl) GetShopById(ctx context.Context, id string) (entity.Shop, error) {
 	return entity.Shop{}, nil
 }
 func (impl *shopRepoImpl) CreateShop(ctx context.Context, dto *entity.CreateShopDTO) (string, error) {
@@ -59,4 +59,6 @@ func (impl *shopRepoImpl) CreateShop(ctx context.Context, dto *entity.CreateShop
 
 	return "", nil
 }
-func (impl *shopRepoImpl) DeleteShop(ctx context.Context) {}
+func (impl *shopRepoImpl) DeleteShop(ctx context.Context, id string) bool {
+	return true
+}

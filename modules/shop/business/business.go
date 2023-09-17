@@ -29,7 +29,7 @@ func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, pag
 
 	return items, nil
 }
-func (biz *business) GetShopById(ctx context.Context) (entity.Shop, error) {
+func (biz *business) GetShopById(ctx context.Context, id string) (entity.Shop, error) {
 	return entity.Shop{}, nil
 }
 func (biz *business) CreateShop(ctx context.Context, dto *entity.CreateShopDTO) (string, error) {
@@ -41,4 +41,6 @@ func (biz *business) CreateShop(ctx context.Context, dto *entity.CreateShopDTO) 
 
 	return result, nil
 }
-func (biz *business) DeleteShop(ctx context.Context) {}
+func (biz *business) DeleteShop(ctx context.Context, id string) bool {
+	return false
+}
