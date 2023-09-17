@@ -33,10 +33,6 @@ func (impl *shopRepoImpl) GetListShop(ctx context.Context, filter *entity.Filter
 		return nil, err
 	}
 
-	for i := range items {
-		items[i].Mask(false)
-	}
-
 	return items, nil
 }
 func (impl *shopRepoImpl) GetShopById(ctx context.Context) (entity.Shop, error) {

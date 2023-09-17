@@ -8,16 +8,16 @@ import (
 )
 
 type UID struct {
-	Id int `json:"id"`
+	LocalId string `json:"id"`
 }
 
-func NewUID(id int) *UID {
+func NewUID(id string) *UID {
 	return &UID{
-		Id: id,
+		LocalId: id,
 	}
 }
 
-func (u *UID) GenerateID() string {
+func (u *UID) GenerateID() UID {
 	t := time.Now()
 	randomString := make([]byte, 6)
 	for i := range randomString {
@@ -33,9 +33,19 @@ func (u *UID) GenerateID() string {
 		m = fmt.Sprintf("%d", int(t.Month()))
 	}
 
-	return fmt.Sprintf("%d%s%s%v", year, m, string(randomString), u.Id)
+	res := fmt.Sprintf("%d%s%s%v", year, m, string(randomString), u.LocalId)
+
+	uuid := UID{
+		LocalId: res,
+	}
+
+	return uuid
+}
+
+func (uid *UID) String() string {
+	return fmt.Sprintf("%v", uid.LocalId)
 }
 
 func (uid UID) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf("\"%v\"", uid)), nil
+	return []byte(fmt.Sprintf("\"%s\"", uid.String())), nil
 }

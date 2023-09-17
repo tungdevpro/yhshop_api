@@ -1,6 +1,7 @@
 package commons
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -13,7 +14,10 @@ type SQLModel struct {
 
 func (sql *SQLModel) GenUID() {
 	uid := UID{
-		Id: sql.Id,
+		LocalId: string(fmt.Sprintf("%d", sql.Id)),
 	}
-	sql.Uid = &uid
+
+	x := uid.GenerateID()
+
+	sql.Uid = &x
 }
