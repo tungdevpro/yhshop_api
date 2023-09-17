@@ -25,10 +25,6 @@ func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, pag
 		return nil, err
 	}
 
-	for i := range items {
-		items[i].Mask(false)
-	}
-
 	return items, nil
 }
 func (biz *business) GetShopById(ctx context.Context, id string) (*entity.Shop, error) {

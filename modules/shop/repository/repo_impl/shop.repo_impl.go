@@ -5,6 +5,8 @@ import (
 	"coffee_api/modules/shop"
 	"coffee_api/modules/shop/entity"
 	"context"
+
+	"github.com/indrasaputra/hashids"
 )
 
 type shopRepoImpl struct {
@@ -17,7 +19,7 @@ func NewShopRepoImpl(appCtx commons.AppContext) shop.Repository {
 	}
 }
 
-func (impl *shopRepoImpl) GetListShop(ctx context.Context, filter *entity.Filter, page *commons.Paging) ([]entity.Shop, error) {
+func (impl *shopRepoImpl) GetListShop(ctx context.Context, filter *entity.Filter, paging *commons.Paging) ([]entity.Shop, error) {
 	impl.appCtx.L.Lock()
 	defer impl.appCtx.L.Unlock()
 
@@ -25,12 +27,28 @@ func (impl *shopRepoImpl) GetListShop(ctx context.Context, filter *entity.Filter
 	db := impl.appCtx.GetDB()
 
 	db = db.Table(entity.Shop{}.TableName()).Where("status = 1")
-	if err := db.Count(&page.Total).Error; err != nil {
+	if err := db.Count(&paging.Total).Error; err != nil {
 		return nil, err
 	}
 
-	if err := db.Limit(page.Limit).Offset((page.Page - 1) * page.Limit).Find(&items).Error; err != nil {
+	if paging.FakeCursor != "" {
+		if curId, err := hashids.DecodeHash([]byte(paging.FakeCursor)); err == nil {
+			db = db.Where("id < ?", curId)
+		}
+	} else {
+		db = db.Offset((paging.Page - 1) * paging.Limit)
+	}
+
+	if err := db.Limit(paging.Limit).Order("id desc").Find(&items).Error; err != nil {
 		return nil, err
+	}
+
+	for i := range items {
+		items[i].Mask(false)
+
+		if i == len(items)-1 {
+			paging.NextCursor = items[i].Uid.EncodeString()
+		}
 	}
 
 	return items, nil
