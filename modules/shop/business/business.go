@@ -17,10 +17,13 @@ func NewBusiness(repo shop.Repository) shop.Business {
 }
 
 func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, page *commons.Paging) ([]entity.Shop, error) {
+	page.Process()
+	items, err := biz.repo.GetListShop(ctx, filter, page)
+	if err != nil {
+		return nil, err
+	}
 
-	// items, err := biz.repo.GetListShop(ctx, filter)
-
-	return []entity.Shop{}, nil
+	return items, nil
 }
 func (biz *business) GetShopById(ctx context.Context) (entity.Shop, error) {
 	return entity.Shop{}, nil

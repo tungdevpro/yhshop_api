@@ -2,6 +2,8 @@ package entity
 
 import "coffee_api/commons"
 
+type ListShopEmpty []Shop
+
 type Shop struct {
 	*commons.SQLModel `json:",inline"`
 	Name              string         `json:"name" gorm:"column:name"`
@@ -13,6 +15,9 @@ type Shop struct {
 	IsVerify          int            `json:"is_verify" gorm:"column:is_verify;default:1"`
 }
 
+func (Shop) TableName() string {
+	return "shops"
+}
 func (s *Shop) Mask(isOwner bool) {
 	s.GenUID()
 }
