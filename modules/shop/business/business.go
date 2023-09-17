@@ -6,6 +6,8 @@ import (
 	"coffee_api/modules/shop/entity"
 	"context"
 	"strings"
+
+	"github.com/indrasaputra/hashids"
 )
 
 type business struct {
@@ -30,11 +32,19 @@ func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, pag
 	return items, nil
 }
 func (biz *business) GetShopById(ctx context.Context, id string) (*entity.Shop, error) {
-	items, err := biz.repo.GetShopById(ctx, id)
+
+	xId, err := hashids.DecodeHash([]byte(id))
 	if err != nil {
 		return nil, err
 	}
-	return items, nil
+
+	item, err := biz.repo.GetShopById(ctx, int(xId))
+	if err != nil {
+		return nil, err
+	}
+
+	item.Mask(false)
+	return item, nil
 }
 func (biz *business) CreateShop(ctx context.Context, dto *entity.CreateShopDTO) (string, error) {
 	dto.Name = strings.TrimSpace(dto.Name)

@@ -13,13 +13,6 @@ type SQLModel struct {
 	UpdatedAt *time.Time `json:"updated_at"`
 }
 
-// func (sql *SQLModel) BeforeCreate(tx *gorm.DB) (err error) {
-// 	sql.Uid = hashids.ID(sql.Id)
-
-// 	fmt.Println("uuid.....", sql.Uid)
-// 	return nil
-// }
-
 func (sql *SQLModel) GenerateID() {
 	sql.Uid = hashids.ID(sql.Id)
 }
