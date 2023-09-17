@@ -29,8 +29,12 @@ func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, pag
 
 	return items, nil
 }
-func (biz *business) GetShopById(ctx context.Context, id string) (entity.Shop, error) {
-	return entity.Shop{}, nil
+func (biz *business) GetShopById(ctx context.Context, id string) (*entity.Shop, error) {
+	items, err := biz.repo.GetShopById(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 func (biz *business) CreateShop(ctx context.Context, dto *entity.CreateShopDTO) (string, error) {
 	dto.Name = strings.TrimSpace(dto.Name)

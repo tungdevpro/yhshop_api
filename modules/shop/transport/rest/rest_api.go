@@ -4,7 +4,6 @@ import (
 	"coffee_api/commons"
 	"coffee_api/modules/shop"
 	"coffee_api/modules/shop/entity"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -44,7 +43,14 @@ func (api *api) ListShopHandler() gin.HandlerFunc {
 
 func (api *api) GetShopHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		fmt.Println("oki: ", ctx.Param("id"))
+		id := ctx.Param("id")
+		item, err := api.biz.GetShopById(ctx.Request.Context(), id)
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
+		}
+		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(item))
+
 	}
 }
 
@@ -64,7 +70,6 @@ func (api *api) CreateShopHandler() gin.HandlerFunc {
 		}
 
 		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(result))
-
 	}
 }
 
