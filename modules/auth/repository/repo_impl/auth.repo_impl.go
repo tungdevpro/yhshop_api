@@ -26,10 +26,12 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 	r.appCtx.L.Lock()
 	defer r.appCtx.L.Unlock()
 
+	db := r.appCtx.GetDB()
+	db.Begin()
+
 	user := userEntity.User{
 		Email: req.Email,
 	}
-	db := r.appCtx.GetDB()
 	result := db.Where(&user).First(&user)
 
 	if result.Error != nil || result.RowsAffected == 0 {
@@ -39,6 +41,7 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 				Role:  string(userEntity.Member),
 			})
 			if err != nil {
+				db.Rollback()
 				return "", err
 			}
 			user.AccessToken = accessToken
@@ -46,17 +49,20 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 			user.FullName = req.FullName
 			user.Password = req.Password
 			if err := db.Create(&user).Error; err != nil {
+				db.Rollback()
 				return "", err
 			}
-			return "", nil
+			return user.Uid.EncodeString(), nil
 		}
 		return "", result.Error
 	}
 
 	if user.Id != 0 {
+		db.Rollback()
 		return "", errors.New(commons.ErrUserIsExist)
 	}
 
+	db.Commit()
 	return user.Uid.EncodeString(), nil
 }
 

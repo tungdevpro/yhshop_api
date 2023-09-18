@@ -28,7 +28,7 @@ func (r *RegisterDTO) Validate() error {
 
 	r.FullName = strings.TrimSpace(r.FullName)
 	if len(r.FullName) != 0 {
-		regex := regexp.MustCompile("^[a-zA-Z]+$")
+		regex := regexp.MustCompile(`^[a-zA-Z\s]+$`)
 		if err := regex.MatchString(r.FullName); !err {
 			return ErrFullNameInvalid
 		}
