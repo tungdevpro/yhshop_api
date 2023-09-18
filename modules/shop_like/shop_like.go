@@ -1,7 +1,19 @@
-package productlike
+package shoplike
 
-type Business interface{}
+import (
+	"context"
 
-type Repository interface{}
+	"github.com/gin-gonic/gin"
+)
 
-type API interface{}
+type API interface {
+	GetShopLikes() gin.HandlerFunc
+}
+
+type Business interface {
+	GetShopLikes(context.Context, []int) (map[int]int, error)
+}
+
+type Repository interface {
+	GetShopLikes(context.Context, []int) (map[int]int, error)
+}
