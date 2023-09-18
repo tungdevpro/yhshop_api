@@ -4,7 +4,9 @@ import (
 	"coffee_api/commons"
 	"coffee_api/modules/shop"
 	"coffee_api/modules/shop/entity"
+	shoplike "coffee_api/modules/shop_like"
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/indrasaputra/hashids"
@@ -12,10 +14,11 @@ import (
 
 type business struct {
 	repo shop.Repository
+	like shoplike.Business
 }
 
-func NewBusiness(repo shop.Repository) shop.Business {
-	return &business{repo: repo}
+func NewBusiness(repo shop.Repository, bizLike shoplike.Business) shop.Business {
+	return &business{repo: repo, like: bizLike}
 }
 
 func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, page *commons.Paging) ([]entity.Shop, error) {
@@ -28,6 +31,17 @@ func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, pag
 	ids := make([]int, len(items))
 	for i, e := range items {
 		ids[i] = e.Id
+	}
+
+	mapRespLikes, err := biz.like.GetShopLikes(ctx, ids)
+	if err != nil {
+		fmt.Println("cannot get like count")
+	}
+
+	if v := mapRespLikes; v != nil {
+		for i, e := range items {
+			items[i].LikedCount = mapRespLikes[e.Id]
+		}
 	}
 
 	return items, nil

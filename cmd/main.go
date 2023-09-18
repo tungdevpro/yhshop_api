@@ -18,6 +18,9 @@ import (
 	implShop "coffee_api/modules/shop/repository/repo_impl"
 	restShop "coffee_api/modules/shop/transport/rest"
 
+	bizShopLike "coffee_api/modules/shop_like/business"
+	implShopLike "coffee_api/modules/shop_like/repository/repo_impl"
+
 	bizUpload "coffee_api/modules/upload/business"
 	implUpload "coffee_api/modules/upload/repository/repo_impl"
 	restUpload "coffee_api/modules/upload/transport/rest"
@@ -38,7 +41,8 @@ func main() {
 	apiUpload := restUpload.NewApi(bizUpload.NewBusiness(implUpload.NewUploadRepoImpl(*appCtx)))
 	apiAuth := restAuth.NewApi(bizAuth.NewBusiness(implAuth.NewAuthRepoImpl(*appCtx)))
 	apiUser := restUser.NewApi(bizUser.NewBusiness(implUser.NewUserRepoImpl(*appCtx)))
-	apiShop := restShop.NewApi(bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx)))
+
+	apiShop := restShop.NewApi(bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx), bizShopLike.NewBusiness(implShopLike.NewShopLikeRepoImpl(*appCtx))))
 
 	engine := gin.Default()
 
