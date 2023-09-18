@@ -22,7 +22,7 @@ func NewAuthRepoImpl(appCtx commons.AppContext) auth.Repository {
 	}
 }
 
-func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO) error {
+func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO) (string, error) {
 	r.appCtx.L.Lock()
 	defer r.appCtx.L.Unlock()
 
@@ -39,28 +39,28 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 				Role:  string(userEntity.Member),
 			})
 			if err != nil {
-				return err
+				return "", err
 			}
 			user.AccessToken = accessToken
 			user.Email = req.Email
 			user.FullName = req.FullName
 			user.Password = req.Password
 			if err := db.Create(&user).Error; err != nil {
-				return err
+				return "", err
 			}
-			return nil
+			return "", nil
 		}
-		return result.Error
+		return "", result.Error
 	}
 
 	if user.Id != 0 {
-		return errors.New(commons.ErrUserIsExist)
+		return "", errors.New(commons.ErrUserIsExist)
 	}
 
-	return nil
+	return user.Uid.EncodeString(), nil
 }
 
-func (r *authRepoImpl) Login(ctx context.Context, loginDto *authEntity.LoginDTO) error {
+func (r *authRepoImpl) Login(ctx context.Context, loginDto *authEntity.LoginDTO) (*authEntity.LoginResponse, error) {
 	r.appCtx.L.Lock()
 	defer r.appCtx.L.Unlock()
 
@@ -72,12 +72,18 @@ func (r *authRepoImpl) Login(ctx context.Context, loginDto *authEntity.LoginDTO)
 	result := db.Where(&user).First(&user)
 
 	if result.Error != nil || result.RowsAffected == 0 {
-		return authEntity.ErrUnauthorized
+		return nil, authEntity.ErrUnauthorized
 	}
 
 	if err := user.VerifyPassword(loginDto.Password); err != nil {
-		return authEntity.ErrUnauthorized
+		return nil, authEntity.ErrUnauthorized
 	}
 
-	return nil
+	resp := authEntity.LoginResponse{
+		Id:          user.Id,
+		FullName:    user.FullName,
+		AccessToken: user.AccessToken,
+	}
+
+	return &resp, nil
 }

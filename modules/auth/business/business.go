@@ -4,8 +4,8 @@ import (
 	"coffee_api/modules/auth"
 	"coffee_api/modules/auth/entity"
 	"context"
-	"fmt"
 
+	"github.com/indrasaputra/hashids"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,35 +19,38 @@ func NewBusiness(r auth.Repository) auth.Business {
 	}
 }
 
-func (biz *business) Register(ctx context.Context, req *entity.RegisterDTO) error {
+func (biz *business) Register(ctx context.Context, req *entity.RegisterDTO) (string, error) {
 	if err := req.Validate(); err != nil {
-		return err
+		return "", err
 	}
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	req.Password = string(passwordHash[:])
-
-	if err := biz.repository.Register(ctx, req); err != nil {
-		return err
+	result, err := biz.repository.Register(ctx, req)
+	if err != nil {
+		return "", err
 	}
 
-	return nil
+	return result, err
 }
 
-func (biz *business) Login(ctx context.Context, req *entity.LoginDTO) error {
+func (biz *business) Login(ctx context.Context, req *entity.LoginDTO) (*entity.LoginResponse, error) {
 	if err := req.Validate(); err != nil {
-		return err
+		return nil, err
 	}
 
-	if err := biz.repository.Login(ctx, req); err != nil {
-		return err
+	result, err := biz.repository.Login(ctx, req)
+	if err != nil {
+		return nil, err
 	}
 
-	fmt.Println("this login: ", req)
+	xId, _ := hashids.EncodeID(hashids.ID(result.Id))
 
-	return nil
+	result.Uid = string(xId)
+
+	return result, nil
 }

@@ -47,7 +47,6 @@ func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, pag
 	return items, nil
 }
 func (biz *business) GetShopById(ctx context.Context, id string) (*entity.Shop, error) {
-
 	xId, err := hashids.DecodeHash([]byte(id))
 	if err != nil {
 		return nil, err
