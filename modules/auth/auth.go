@@ -8,16 +8,16 @@ import (
 )
 
 type Business interface {
-	Register(context.Context, *entity.RegisterDTO) (string, error)
 	Login(context.Context, *entity.LoginDTO) (*entity.LoginResponse, error)
+	Register(context.Context, *entity.RegisterDTO) (*entity.RegisterReponse, error)
 }
 
 type Repository interface {
 	Login(context.Context, *entity.LoginDTO) (*entity.LoginResponse, error)
-	Register(context.Context, *entity.RegisterDTO) (string, error)
+	Register(context.Context, *entity.RegisterDTO) (*entity.RegisterReponse, error)
 }
 
 type API interface {
-	RegisterHandler() gin.HandlerFunc
 	LoginHandler() gin.HandlerFunc
+	RegisterHandler() gin.HandlerFunc
 }

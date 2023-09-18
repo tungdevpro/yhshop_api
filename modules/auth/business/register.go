@@ -7,20 +7,20 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (biz *business) Register(ctx context.Context, req *entity.RegisterDTO) (string, error) {
+func (biz *business) Register(ctx context.Context, req *entity.RegisterDTO) (*entity.RegisterReponse, error) {
 	if err := req.Validate(); err != nil {
-		return "", err
+		return nil, err
 	}
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	req.Password = string(passwordHash[:])
 	result, err := biz.repository.Register(ctx, req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	return result, err

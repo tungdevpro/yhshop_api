@@ -4,11 +4,13 @@ import (
 	"coffee_api/commons"
 	"coffee_api/middleware"
 	"coffee_api/modules/auth"
+	"coffee_api/modules/auth/entity"
 	authEntity "coffee_api/modules/auth/entity"
 	userEntity "coffee_api/modules/user/entity"
 	"context"
 	"errors"
 
+	"github.com/indrasaputra/hashids"
 	"gorm.io/gorm"
 )
 
@@ -22,48 +24,57 @@ func NewAuthRepoImpl(appCtx commons.AppContext) auth.Repository {
 	}
 }
 
-func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO) (string, error) {
+func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO) (*entity.RegisterReponse, error) {
 	r.appCtx.L.Lock()
 	defer r.appCtx.L.Unlock()
 
 	db := r.appCtx.GetDB()
 	db.Begin()
 
-	user := userEntity.User{
+	doc := entity.CreateUser{
 		Email: req.Email,
 	}
-	result := db.Where(&user).First(&user)
+	result := db.Where(&doc).First(&doc)
 
 	if result.Error != nil || result.RowsAffected == 0 {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			doc.Email = req.Email
+			doc.Password = req.Password
+			doc.FullName = req.FullName
+			if err := db.Create(&doc).Error; err != nil {
+				db.Rollback()
+				return nil, err
+			}
+			pId := hashids.ID(doc.Id)
+			uid, _ := hashids.EncodeID(pId)
 			accessToken, err := middleware.GenToken(r.appCtx.Cfg, middleware.JwtPayload{
-				Email: user.Email,
-				Role:  string(userEntity.Member),
+				Id:   string(uid),
+				Role: string(userEntity.Member),
 			})
 			if err != nil {
 				db.Rollback()
-				return "", err
+				return nil, err
 			}
-			user.AccessToken = accessToken
-			user.Email = req.Email
-			user.FullName = req.FullName
-			user.Password = req.Password
-			if err := db.Create(&user).Error; err != nil {
-				db.Rollback()
-				return "", err
+
+			resp := entity.RegisterReponse{
+				Id:          doc.Id,
+				Uid:         string(uid),
+				AccessToken: accessToken,
+				Email:       doc.Email,
+				FullName:    doc.FullName,
 			}
-			return user.Uid.EncodeString(), nil
+			return &resp, nil
 		}
-		return "", result.Error
+		return nil, result.Error
 	}
 
-	if user.Id != 0 {
+	if doc.Id != 0 {
 		db.Rollback()
-		return "", errors.New(commons.ErrUserIsExist)
+		return nil, errors.New(commons.ErrUserIsExist)
 	}
 
 	db.Commit()
-	return user.Uid.EncodeString(), nil
+	return nil, nil
 }
 
 func (r *authRepoImpl) Login(ctx context.Context, loginDto *authEntity.LoginDTO) (*authEntity.LoginResponse, error) {

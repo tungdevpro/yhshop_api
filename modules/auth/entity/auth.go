@@ -60,3 +60,13 @@ func isEmailAddress(input string) error {
 
 	return err
 }
+
+type CreateUser struct {
+	Id          int    `json:"-" gorm:"column:id;"`
+	Email       string `json:"email" gorm:"column:email;"`
+	FullName    string `json:"fullname" gorm:"column:fullname;"`
+	Password    string `json:"-" gorm:"column:password;"`
+	AccessToken string `json:"access_token"`
+}
+
+func (CreateUser) TableName() string { return "users" }

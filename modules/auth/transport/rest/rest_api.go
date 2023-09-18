@@ -35,7 +35,7 @@ func (api *api) RegisterHandler() gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(result))
+		ctx.JSON(http.StatusOK, commons.CreateNewSuccessResp(result, entity.MsgCreateNewUser))
 	}
 }
 func (api *api) LoginHandler() gin.HandlerFunc {
@@ -53,6 +53,6 @@ func (api *api) LoginHandler() gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(result))
+		ctx.JSON(http.StatusOK, commons.CreateNewSuccessResp(result, entity.MsgLoginSuccess))
 	}
 }

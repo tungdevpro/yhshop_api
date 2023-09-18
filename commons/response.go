@@ -8,6 +8,16 @@ type successResponse struct {
 	Filter     interface{} `json:"filter,omitempty"`
 }
 
+func CreateNewSuccessResp(data interface{}, msg string) *successResponse {
+	return &successResponse{
+		Paging:     nil,
+		Filter:     nil,
+		StatusCode: Ok,
+		Message:    msg,
+		Data:       data,
+	}
+}
+
 func SimpleSuccessResp(data interface{}) *successResponse {
 	return NewSuccessResp(data, nil, nil)
 }

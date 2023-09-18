@@ -6,6 +6,7 @@ import (
 	"coffee_api/configs/prefix"
 	"coffee_api/db"
 	"coffee_api/helpers"
+	"coffee_api/middleware"
 	bizAuth "coffee_api/modules/auth/business"
 	implAuth "coffee_api/modules/auth/repository/repo_impl"
 	restAuth "coffee_api/modules/auth/transport/rest"
@@ -45,6 +46,8 @@ func main() {
 	apiShop := restShop.NewApi(bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx), bizShopLike.NewBusiness(implShopLike.NewShopLikeRepoImpl(*appCtx))))
 
 	engine := gin.Default()
+
+	engine.Use(middleware.AuthRequired(*appCtx))
 
 	v1 := engine.Group(prefix.V1)
 	{
