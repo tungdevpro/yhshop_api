@@ -13,6 +13,7 @@ type Shop struct {
 	Image             *commons.Image `json:"images" gorm:"column:images"`
 	Status            int            `json:"status" gorm:"column:status;default:1"`
 	IsVerify          int            `json:"is_verify" gorm:"column:is_verify;default:1"`
+	LikedCount        int            `json:"liked_count" gorm:"-"`
 }
 
 func (Shop) TableName() string {
