@@ -7,6 +7,9 @@ import (
 	"coffee_api/db"
 	"coffee_api/helpers"
 	"coffee_api/middleware"
+	bizJwt "coffee_api/middleware/jwt_explore/business"
+	implJwt "coffee_api/middleware/jwt_explore/repository/repo_impl"
+
 	bizAuth "coffee_api/modules/auth/business"
 	implAuth "coffee_api/modules/auth/repository/repo_impl"
 	restAuth "coffee_api/modules/auth/transport/rest"
@@ -42,12 +45,12 @@ func main() {
 	apiUpload := restUpload.NewApi(bizUpload.NewBusiness(implUpload.NewUploadRepoImpl(*appCtx)))
 	apiAuth := restAuth.NewApi(bizAuth.NewBusiness(implAuth.NewAuthRepoImpl(*appCtx)))
 	apiUser := restUser.NewApi(bizUser.NewBusiness(implUser.NewUserRepoImpl(*appCtx)))
-
 	apiShop := restShop.NewApi(bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx), bizShopLike.NewBusiness(implShopLike.NewShopLikeRepoImpl(*appCtx))))
+	jwtHandler := bizJwt.NewBusiness(implJwt.NewJwtExploreRepoImpl(*appCtx))
 
 	engine := gin.Default()
 
-	engine.Use(middleware.AuthRequired(*appCtx))
+	engine.Use(middleware.AuthRequired(*appCtx, jwtHandler))
 
 	v1 := engine.Group(prefix.V1)
 	{

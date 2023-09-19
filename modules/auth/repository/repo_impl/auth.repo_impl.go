@@ -49,7 +49,7 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 			uid, _ := hashids.EncodeID(pId)
 			accessToken, err := middleware.GenToken(r.appCtx.Cfg, middleware.JwtPayload{
 				Id:   string(uid),
-				Role: string(userEntity.Member),
+				Role: string(commons.Member),
 			})
 			if err != nil {
 				db.Rollback()
@@ -63,6 +63,7 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 				Email:       doc.Email,
 				FullName:    doc.FullName,
 			}
+			db.Commit()
 			return &resp, nil
 		}
 		return nil, result.Error
