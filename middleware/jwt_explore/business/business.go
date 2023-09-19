@@ -1,8 +1,8 @@
 package business
 
 import (
-	"coffee_api/commons"
 	jwtexplore "coffee_api/middleware/jwt_explore"
+	"coffee_api/modules/user/entity"
 	"context"
 )
 
@@ -16,7 +16,7 @@ func NewBusiness(repo jwtexplore.Repository) jwtexplore.Business {
 	}
 }
 
-func (biz *business) FindUser(ctx context.Context, id int) (*commons.SimpleUser, error) {
+func (biz *business) FindUser(ctx context.Context, id int) (*entity.User, error) {
 	result, err := biz.repo.FindUser(ctx, id)
 	if err != nil {
 		return nil, err

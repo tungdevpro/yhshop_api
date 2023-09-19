@@ -84,6 +84,11 @@ func main() {
 
 	}
 
+	// engine.Any("*", func(ctx *gin.Context) {
+	// 	path := ctx.FullPath()
+	// 	return
+	// })
+
 	if err := engine.Run(fmt.Sprintf(":%s", cfg.Port)); err != nil {
 		helpers.Fatal(err)
 	}

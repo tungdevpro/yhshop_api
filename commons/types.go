@@ -2,10 +2,6 @@ package commons
 
 import "database/sql/driver"
 
-const (
-	CurrentUser = "current_user"
-)
-
 type RoleAllowed string
 
 const (

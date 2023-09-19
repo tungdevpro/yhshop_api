@@ -22,8 +22,18 @@ type User struct {
 	AccessToken string `json:"access_token" gorm:"column:access_token;"`
 }
 
-func (u *User) TableName() string {
-	return "users"
+func (u *User) TableName() string { return "users" }
+
+func (u *User) GetUserId() string {
+	return u.Uid.EncodeString()
+}
+
+func (u *User) GetEmail() string {
+	return u.Email
+}
+
+func (u *User) GetRole() string {
+	return string(u.Role)
 }
 
 func (user *User) SetPassword(password string) error {
@@ -46,10 +56,6 @@ func (user *User) ToSimpler() *commons.SimpleUser {
 	simple.Email = user.Email
 	simple.Role = user.Role
 	return simple
-}
-
-func (user *User) GetRole() string {
-	return string(user.Role)
 }
 
 func (user *User) IsActive() bool {
