@@ -65,3 +65,11 @@ func (user *User) ToSimpler() *commons.SimpleUser {
 	simple.Role = user.Role
 	return simple
 }
+
+func (user *User) GetRole() string {
+	return string(user.Role)
+}
+
+func (user *User) IsActive() bool {
+	return user.Status == Active
+}
