@@ -16,6 +16,10 @@ func NewBusiness(repo jwtexplore.Repository) jwtexplore.Business {
 	}
 }
 
-func (biz *business) FindUser(context.Context, int) (*commons.SimpleUser, error) {
-	return nil, nil
+func (biz *business) FindUser(ctx context.Context, id int) (*commons.SimpleUser, error) {
+	result, err := biz.repo.FindUser(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }

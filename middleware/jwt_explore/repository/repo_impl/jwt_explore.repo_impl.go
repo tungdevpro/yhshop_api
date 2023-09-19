@@ -4,7 +4,6 @@ import (
 	"coffee_api/commons"
 	jwtexplore "coffee_api/middleware/jwt_explore"
 	"context"
-	"fmt"
 )
 
 type jwtexploreRepoImpl struct {
@@ -32,7 +31,6 @@ func (impl *jwtexploreRepoImpl) FindUser(ctx context.Context, id int) (*commons.
 		return nil, err
 	}
 
-	fmt.Println("id....", simpler)
 	db.Commit()
 	return &simpler, nil
 }
