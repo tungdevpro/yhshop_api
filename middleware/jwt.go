@@ -1,8 +1,9 @@
 package middleware
 
 import (
+	"coffee_api/commons"
 	"coffee_api/configs"
-	"fmt"
+	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -49,7 +50,10 @@ func Validate(cfg *configs.Configuration, tokenString string) (string, error) {
 	}
 
 	if tk.Valid {
-		fmt.Println("claims:: ", claims.ExpiresAt)
+		expiry := claims.ExpiresAt
+		if expiry < time.Now().Unix() {
+			return "", errors.New(commons.ErrTokenIsExpired)
+		}
 
 		return claims.Id, nil
 	}
