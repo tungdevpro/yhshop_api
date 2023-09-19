@@ -54,8 +54,7 @@ func (user *User) ToSimpler() *commons.SimpleUser {
 	simple := &commons.SimpleUser{}
 	simple.Id = user.Id
 	simple.Uid = user.Uid
-	simple.Email = user.Email
-	simple.Role = user.Role
+	// simple.Role = user.Role
 	return simple
 }
 
