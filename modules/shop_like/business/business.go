@@ -1,7 +1,9 @@
 package business
 
 import (
+	"coffee_api/commons"
 	shoplike "coffee_api/modules/shop_like"
+	"coffee_api/modules/shop_like/entity"
 	"context"
 	"fmt"
 )
@@ -23,4 +25,9 @@ func (biz *business) GetShopLikes(ctx context.Context, ids []int) (map[int]int, 
 	}
 
 	return item, nil
+}
+
+func (biz *business) GetLikedUsers(ctx context.Context, filter *entity.Filter) ([]commons.SimpleUser, error) {
+
+	return nil, nil
 }

@@ -17,10 +17,11 @@ const (
 	Upload = "/upload"
 
 	// Shop
-	Shop     = "/shop"
-	ListShop = "/shops"
-	GetShop  = "/:id"
-	DelShop  = "/:id"
+	Shop       = "/shop"
+	ListShop   = "/shops"
+	GetShop    = "/:id"
+	DelShop    = "/:id"
+	LikedUsers = "/:id/liked-user"
 
 	// Shipper
 	Shipper     = "/shipper"

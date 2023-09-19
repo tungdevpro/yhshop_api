@@ -24,6 +24,7 @@ import (
 
 	bizShopLike "coffee_api/modules/shop_like/business"
 	implShopLike "coffee_api/modules/shop_like/repository/repo_impl"
+	restShopLike "coffee_api/modules/shop_like/transport/rest"
 
 	bizUpload "coffee_api/modules/upload/business"
 	implUpload "coffee_api/modules/upload/repository/repo_impl"
@@ -45,7 +46,9 @@ func main() {
 	apiUpload := restUpload.NewApi(bizUpload.NewBusiness(implUpload.NewUploadRepoImpl(*appCtx)))
 	apiAuth := restAuth.NewApi(bizAuth.NewBusiness(implAuth.NewAuthRepoImpl(*appCtx)))
 	apiUser := restUser.NewApi(bizUser.NewBusiness(implUser.NewUserRepoImpl(*appCtx)))
-	apiShop := restShop.NewApi(bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx), bizShopLike.NewBusiness(implShopLike.NewShopLikeRepoImpl(*appCtx))))
+	newBizShopLike := bizShopLike.NewBusiness(implShopLike.NewShopLikeRepoImpl(*appCtx))
+	apiShopLike := restShopLike.NewApi(newBizShopLike)
+	apiShop := restShop.NewApi(bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx), newBizShopLike))
 	jwtHandler := bizJwt.NewBusiness(implJwt.NewJwtExploreRepoImpl(*appCtx))
 
 	engine := gin.Default()
@@ -79,6 +82,7 @@ func main() {
 			shop.GET(prefix.GetShop, apiShop.GetShopHandler())
 			shop.PUT(prefix.GetShop, apiShop.UpdateShopHandler())
 			shop.DELETE(prefix.DelShop, apiShop.DeleteShopHandler())
+			shop.GET(prefix.LikedUsers, apiShopLike.GetLikedUsers())
 		}
 		v1.GET(prefix.ListShop, apiShop.ListShopHandler())
 

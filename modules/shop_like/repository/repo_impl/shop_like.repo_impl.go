@@ -11,7 +11,7 @@ type shopLikeRepoImpl struct {
 	appCtx commons.AppContext
 }
 
-func NewShopLikeRepoImpl(appCtx commons.AppContext) shoplike.Business {
+func NewShopLikeRepoImpl(appCtx commons.AppContext) shoplike.Repository {
 	return &shopLikeRepoImpl{
 		appCtx: appCtx,
 	}
@@ -41,3 +41,13 @@ func (impl *shopLikeRepoImpl) GetShopLikes(ctx context.Context, ids []int) (map[
 
 	return result, nil
 }
+
+func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.Filter) ([]commons.SimpleUser, error) {
+
+	return []commons.SimpleUser{}, nil
+}
+
+// func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.Filter) ([]commons.SimpleUser, error) {
+
+// 	return []commons.SimpleUser{}, nil
+// }

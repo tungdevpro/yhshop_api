@@ -19,3 +19,7 @@ func NewApi(biz shoplike.Business) shoplike.API {
 func (api *api) GetShopLikes() gin.HandlerFunc {
 	return func(ctx *gin.Context) {}
 }
+
+func (api *api) GetLikedUsers() gin.HandlerFunc {
+	return func(ctx *gin.Context) {}
+}
