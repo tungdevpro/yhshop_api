@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"coffee_api/configs"
-	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -49,8 +48,7 @@ func Validate(cfg *configs.Configuration, tokenString string) (string, error) {
 	}
 
 	if tk.Valid {
-		// return tk.Claims.,
-		fmt.Println("claims::: ", claims.Id)
+		return claims.Id, nil
 	}
 
 	return "", nil

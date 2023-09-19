@@ -2,7 +2,7 @@ package helpers
 
 import "strings"
 
-func ExtraTokenFromHeader(s string) string {
+func GetTokenFromAuthHeader(s string) string {
 	items := strings.Split(s, " ")
 	bearer := strings.TrimSpace(items[0])
 
