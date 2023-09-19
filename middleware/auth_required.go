@@ -4,7 +4,7 @@ import (
 	"coffee_api/commons"
 	"coffee_api/helpers"
 	jwtexplore "coffee_api/middleware/jwt_explore"
-	"fmt"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -34,12 +34,11 @@ func AuthRequired(appCtx commons.AppContext, bizJwt jwtexplore.Business) gin.Han
 		}
 
 		if ok := user.IsActive(); !ok {
-			ctx.AbortWithError(http.StatusUnauthorized, err)
+			ctx.AbortWithError(http.StatusUnauthorized, errors.New(commons.ErrUserIsInActive))
 			return
 		}
 
-		fmt.Println("log: ", user)
-
+		ctx.Set(commons.CurrentUser, user)
 		ctx.Next()
 	}
 }
