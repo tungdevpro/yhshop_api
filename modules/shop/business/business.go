@@ -62,7 +62,6 @@ func (biz *business) GetShopById(ctx context.Context, id string) (*entity.Shop, 
 }
 func (biz *business) CreateShop(ctx context.Context, dto *entity.CreateShopDTO) (string, error) {
 	dto.Name = strings.TrimSpace(dto.Name)
-	fmt.Println("biz...", dto.OwnerId)
 	result, err := biz.repo.CreateShop(ctx, dto)
 	if err != nil {
 		return "", err
