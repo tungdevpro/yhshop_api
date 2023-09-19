@@ -18,6 +18,7 @@ type User struct {
 	OTPCode           int                   `json:"otp_code" gorm:"column:otp_code"`
 	IsEmailVerified   bool                  `json:"is_email_verified" gorm:"column:is_email_verified;default:false"`
 	Password          string                `gorm:"column:password;" json:"-"`
+	Gender            commons.Gender        `json:"gender" gorm:"column:gender;type:ENUM('male','female','other');"`
 
 	AccessToken string `json:"access_token" gorm:"column:access_token;"`
 }

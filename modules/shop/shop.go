@@ -16,7 +16,7 @@ type Business interface {
 }
 
 type Repository interface {
-	GetListShop(context.Context, *entity.Filter, *commons.Paging) ([]entity.Shop, error)
+	GetListShop(context.Context, *entity.Filter, *commons.Paging, ...string) ([]entity.Shop, error)
 	GetShopById(context.Context, int) (*entity.Shop, error)
 	CreateShop(context.Context, *entity.CreateShopDTO) (string, error)
 	DeleteShop(context.Context, string) bool

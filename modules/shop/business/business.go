@@ -23,7 +23,7 @@ func NewBusiness(repo shop.Repository, bizLike shoplike.Business) shop.Business 
 
 func (biz *business) GetListShop(ctx context.Context, filter *entity.Filter, page *commons.Paging) ([]entity.Shop, error) {
 	page.Process()
-	items, err := biz.repo.GetListShop(ctx, filter, page)
+	items, err := biz.repo.GetListShop(ctx, filter, page, "User")
 	if err != nil {
 		return nil, err
 	}

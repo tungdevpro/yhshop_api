@@ -19,7 +19,7 @@ func NewShopRepoImpl(appCtx commons.AppContext) shop.Repository {
 	}
 }
 
-func (impl *shopRepoImpl) GetListShop(ctx context.Context, filter *entity.Filter, paging *commons.Paging) ([]entity.Shop, error) {
+func (impl *shopRepoImpl) GetListShop(ctx context.Context, filter *entity.Filter, paging *commons.Paging, args ...string) ([]entity.Shop, error) {
 	impl.appCtx.L.Lock()
 	defer impl.appCtx.L.Unlock()
 
@@ -29,6 +29,10 @@ func (impl *shopRepoImpl) GetListShop(ctx context.Context, filter *entity.Filter
 	db = db.Table(entity.Shop{}.TableName()).Where("status = 1")
 	if err := db.Count(&paging.Total).Error; err != nil {
 		return nil, err
+	}
+
+	for i := range args {
+		db = db.Preload(args[i])
 	}
 
 	if paging.FakeCursor != "" {
@@ -75,7 +79,7 @@ func (impl *shopRepoImpl) CreateShop(ctx context.Context, dto *entity.CreateShop
 	shop := entity.Shop{
 		Name:     dto.Name,
 		CityId:   1,
-		OwnerId:  dto.OwnerId,
+		UserId:   dto.OwnerId,
 		IsVerify: 0,
 	}
 

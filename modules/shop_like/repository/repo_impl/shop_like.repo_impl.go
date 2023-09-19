@@ -5,7 +5,6 @@ import (
 	shoplike "coffee_api/modules/shop_like"
 	"coffee_api/modules/shop_like/entity"
 	"context"
-	"fmt"
 )
 
 type shopLikeRepoImpl struct {
@@ -39,8 +38,6 @@ func (impl *shopLikeRepoImpl) GetShopLikes(ctx context.Context, ids []int) (map[
 	for _, item := range listLike {
 		result[item.ShopId] = item.LikeCount
 	}
-
-	fmt.Println("impl:::: ", result)
 
 	return result, nil
 }

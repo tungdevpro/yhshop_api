@@ -39,3 +39,20 @@ func (r *StatusAllowed) Scan(value interface{}) error {
 func (r StatusAllowed) Value() (driver.Value, error) {
 	return string(r), nil
 }
+
+type Gender string
+
+const (
+	Male   Gender = "male"
+	Female Gender = "female"
+	Other  Gender = "other"
+)
+
+func (r *Gender) Scan(value interface{}) error {
+	*r = Gender(value.([]byte))
+	return nil
+}
+
+func (r Gender) Value() (driver.Value, error) {
+	return string(r), nil
+}
