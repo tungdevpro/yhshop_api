@@ -25,7 +25,7 @@ func SimpleSuccessResp(data interface{}) *successResponse {
 func NewSuccessResp(data interface{}, paging interface{}, filter interface{}) *successResponse {
 	return &successResponse{
 		StatusCode: Ok,
-		Message:    MsgSuccess,
+		Message:    "Success",
 		Data:       data,
 		Paging:     paging,
 		Filter:     filter,
