@@ -63,6 +63,9 @@ func (api *api) CreateShopHandler() gin.HandlerFunc {
 			return
 		}
 
+		requester := ctx.MustGet(commons.CurrentUser).(commons.Requester)
+		dto.OwnerId = requester.GetUserId()
+
 		result, err := api.biz.CreateShop(ctx.Request.Context(), &dto)
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))

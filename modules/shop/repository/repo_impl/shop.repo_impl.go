@@ -5,6 +5,7 @@ import (
 	"coffee_api/modules/shop"
 	"coffee_api/modules/shop/entity"
 	"context"
+	"fmt"
 
 	"github.com/indrasaputra/hashids"
 )
@@ -75,9 +76,12 @@ func (impl *shopRepoImpl) CreateShop(ctx context.Context, dto *entity.CreateShop
 	shop := entity.Shop{
 		Name:     dto.Name,
 		CityId:   1,
-		OwnerId:  2,
-		IsVerify: 1,
+		OwnerId:  dto.OwnerId,
+		IsVerify: 0,
 	}
+	fmt.Println("dto>> ", dto.OwnerId)
+
+	fmt.Println("shop>> ", shop)
 
 	if err := db.Create(&shop).Error; err != nil {
 		return "", nil

@@ -7,7 +7,7 @@ import (
 
 type CreateShopDTO struct {
 	Name    string         `json:"name" form:"name"`
-	OwnerId string         `json:"owner_id" form:"owner_id"`
+	OwnerId int            `json:"owner_id" form:"owner_id"`
 	Icon    *commons.Image `json:"icon" form:"icon"`
 	CityId  int            `json:"city_id" form:"city_id"`
 }

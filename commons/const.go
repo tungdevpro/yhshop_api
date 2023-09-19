@@ -5,7 +5,7 @@ const (
 )
 
 type Requester interface {
-	GetUserId() string
+	GetUserId() int
 	GetEmail() string
 	GetRole() string
 }

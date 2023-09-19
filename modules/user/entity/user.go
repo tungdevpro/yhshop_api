@@ -24,8 +24,8 @@ type User struct {
 
 func (u *User) TableName() string { return "users" }
 
-func (u *User) GetUserId() string {
-	return u.Uid.EncodeString()
+func (u *User) GetUserId() int {
+	return u.Id
 }
 
 func (u *User) GetEmail() string {
