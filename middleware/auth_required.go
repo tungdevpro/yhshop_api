@@ -33,6 +33,11 @@ func AuthRequired(appCtx commons.AppContext, bizJwt jwtexplore.Business) gin.Han
 			return
 		}
 
+		if ok := user.IsActive(); !ok {
+			ctx.AbortWithError(http.StatusUnauthorized, err)
+			return
+		}
+
 		fmt.Println("log: ", user)
 
 		ctx.Next()

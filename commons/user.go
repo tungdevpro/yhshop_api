@@ -1,32 +1,14 @@
 package commons
 
-import "database/sql/driver"
-
-type RoleAllowed string
-
-const (
-	admin   RoleAllowed = "admin"
-	Seller  RoleAllowed = "seller"
-	Shipper RoleAllowed = "shipper"
-	Member  RoleAllowed = "member"
-)
-
-func (st *RoleAllowed) Scan(value interface{}) error {
-	b, ok := value.([]byte)
-	if !ok {
-		*st = RoleAllowed(b)
-	}
-	return nil
-}
-
-func (st RoleAllowed) Value() (driver.Value, error) {
-	return string(st), nil
-}
-
 type SimpleUser struct {
 	SQLModel `json:",inline"`
-	Email    string      `json:"email"`
-	Role     RoleAllowed `json:"role"`
+	Email    string        `json:"email"`
+	Role     RoleAllowed   `json:"role"`
+	Status   StatusAllowed `json:"status" gorm:"column:status;type:ENUM('active','suspended','inactive');default:'active'"`
 }
 
 func (SimpleUser) TableName() string { return "users" }
+
+func (user *SimpleUser) IsActive() bool {
+	return user.Status == Active
+}

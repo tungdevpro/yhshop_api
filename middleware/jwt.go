@@ -54,11 +54,8 @@ func Validate(cfg *configs.Configuration, tokenString string) (string, error) {
 		if expiry < time.Now().Unix() {
 			return "", errors.New(commons.ErrTokenIsExpired)
 		}
-
 		return claims.Id, nil
 	}
 
 	return "", nil
-
-	// jwt.ParseWithClaims(tokenString, &claims, )
 }
