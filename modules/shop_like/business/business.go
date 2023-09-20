@@ -28,6 +28,9 @@ func (biz *business) GetShopLikes(ctx context.Context, ids []int) (map[int]int, 
 }
 
 func (biz *business) GetLikedUsers(ctx context.Context, filter *entity.Filter) ([]commons.SimpleUser, error) {
-
-	return nil, nil
+	items, err := biz.repo.GetLikedUsers(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
 }
