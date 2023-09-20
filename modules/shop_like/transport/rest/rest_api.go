@@ -33,9 +33,18 @@ func (api *api) GetLikedUsers() gin.HandlerFunc {
 			return
 		}
 
+		var params struct {
+			commons.Paging
+		}
+
+		if err := ctx.ShouldBind(&params); err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
+		}
+
 		items, err := api.biz.GetLikedUsers(ctx.Request.Context(), &entity.Filter{
 			ShopId: id,
-		})
+		}, &params.Paging)
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
 			return

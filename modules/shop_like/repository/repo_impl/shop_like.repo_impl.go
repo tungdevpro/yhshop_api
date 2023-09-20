@@ -42,7 +42,25 @@ func (impl *shopLikeRepoImpl) GetShopLikes(ctx context.Context, ids []int) (map[
 	return result, nil
 }
 
-func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.Filter) ([]commons.SimpleUser, error) {
+func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.Filter, paging *commons.Paging) ([]commons.SimpleUser, error) {
+	impl.appCtx.L.Lock()
+	defer impl.appCtx.L.Unlock()
 
+	db := impl.appCtx.GetDB()
+	db.Begin()
+	db = db.Table(entity.ShopLike{}.TableName())
+
+	if v := filter; v != nil {
+		if v.ShopId > 0 {
+			db = db.Where("shop_id = ?", v.ShopId)
+		}
+	}
+
+	if err := db.Count(&paging.Total).Error; err != nil {
+		db.Rollback()
+		return []commons.SimpleUser{}, err
+	}
+
+	db.Commit()
 	return []commons.SimpleUser{}, nil
 }

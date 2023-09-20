@@ -15,10 +15,10 @@ type API interface {
 
 type Business interface {
 	GetShopLikes(context.Context, []int) (map[int]int, error)
-	GetLikedUsers(context.Context, *entity.Filter) ([]commons.SimpleUser, error)
+	GetLikedUsers(context.Context, *entity.Filter, *commons.Paging) ([]commons.SimpleUser, error)
 }
 
 type Repository interface {
 	GetShopLikes(context.Context, []int) (map[int]int, error)
-	GetLikedUsers(context.Context, *entity.Filter) ([]commons.SimpleUser, error)
+	GetLikedUsers(context.Context, *entity.Filter, *commons.Paging) ([]commons.SimpleUser, error)
 }
