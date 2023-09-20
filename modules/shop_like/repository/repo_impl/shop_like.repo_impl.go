@@ -46,8 +46,3 @@ func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.
 
 	return []commons.SimpleUser{}, nil
 }
-
-// func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.Filter) ([]commons.SimpleUser, error) {
-
-// 	return []commons.SimpleUser{}, nil
-// }
