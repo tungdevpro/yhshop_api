@@ -19,8 +19,8 @@ type User struct {
 	IsEmailVerified   bool                  `json:"is_email_verified" gorm:"column:is_email_verified;default:false"`
 	Password          string                `gorm:"column:password;" json:"-"`
 	Gender            commons.Gender        `json:"gender" gorm:"column:gender;type:ENUM('male','female','other');"`
-
-	AccessToken string `json:"access_token" gorm:"column:access_token;"`
+	AccessToken       string                `json:"access_token" gorm:"column:access_token;"`
+	Os                *OsType               `json:"os" gorm:"column:os;"`
 }
 
 func (u *User) TableName() string { return "users" }
