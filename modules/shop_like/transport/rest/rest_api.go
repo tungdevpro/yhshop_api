@@ -50,6 +50,6 @@ func (api *api) GetLikedUsers() gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(items))
+		ctx.JSON(http.StatusOK, commons.NewSuccessResp(items, params.Paging, nil))
 	}
 }
