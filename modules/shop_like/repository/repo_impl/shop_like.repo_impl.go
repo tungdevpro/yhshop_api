@@ -73,6 +73,7 @@ func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.
 	items := make([]commons.SimpleUser, len(shopLikes))
 
 	for i := range shopLikes {
+		shopLikes[i].User.UpdatedAt = nil
 		items[i] = *shopLikes[i].User
 		items[i].GenerateID()
 	}

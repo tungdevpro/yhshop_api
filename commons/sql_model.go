@@ -9,8 +9,8 @@ import (
 type SQLModel struct {
 	Id        int        `json:"-" gorm:"column:id;"`
 	Uid       hashids.ID `json:"id" gorm:"-"`
-	CreatedAt *time.Time `json:"created_at"`
-	UpdatedAt *time.Time `json:"updated_at"`
+	CreatedAt *time.Time `json:"created_at,omitempty" gorm:"column:created_at;"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty" gorm:"column:updated_at"`
 }
 
 func (sql *SQLModel) GenerateID() {
