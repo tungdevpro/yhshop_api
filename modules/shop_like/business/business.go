@@ -34,3 +34,7 @@ func (biz *business) GetLikedUsers(ctx context.Context, filter *entity.Filter, p
 	}
 	return items, nil
 }
+
+func (biz *business) CreateLikes(ctx context.Context) (*string, error) {
+	return nil, nil
+}

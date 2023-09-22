@@ -20,11 +20,11 @@ func NewApi(biz shoplike.Business) shoplike.API {
 	}
 }
 
-func (api *api) GetShopLikes() gin.HandlerFunc {
+func (api *api) GetShopLikesHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {}
 }
 
-func (api *api) GetLikedUsers() gin.HandlerFunc {
+func (api *api) GetLikedUsersHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		idShop := ctx.Param("id")
 		id, err := strconv.Atoi(idShop)
@@ -49,7 +49,10 @@ func (api *api) GetLikedUsers() gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
 			return
 		}
-
 		ctx.JSON(http.StatusOK, commons.NewSuccessResp(items, params.Paging, nil))
 	}
+}
+
+func (api *api) CreateLikesHandler() gin.HandlerFunc {
+	return func(ctx *gin.Context) {}
 }
