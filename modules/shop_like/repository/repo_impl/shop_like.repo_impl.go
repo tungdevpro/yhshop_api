@@ -49,7 +49,6 @@ func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.
 	shopLikes := []entity.ShopLike{}
 
 	db := impl.appCtx.GetDB()
-	db.Begin()
 	db = db.Table(entity.ShopLike{}.TableName())
 
 	if v := filter; v != nil {
@@ -61,12 +60,10 @@ func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.
 	db = db.Preload("User")
 
 	if err := db.Find(&shopLikes).Error; err != nil {
-		db.Rollback()
 		return []commons.SimpleUser{}, err
 	}
 
 	if err := db.Count(&paging.Total).Error; err != nil {
-		db.Rollback()
 		return []commons.SimpleUser{}, err
 	}
 
@@ -78,6 +75,5 @@ func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.
 		items[i].GenerateID()
 	}
 
-	db.Commit()
 	return items, nil
 }
