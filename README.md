@@ -4,7 +4,7 @@ The project simulates features, purchases, and deliveries
 
 ## Overview
 - Using JWT for authentication
-- Apply Clean Architecture for project (Learn more at [200lab](https://200lab.io/blog/ung-dung-clean-architecture-service-golang-rest-api/))
+- Apply Clean Architecture for project (Learn more at [200lab.io/blog/ung-dung-clean-architecture-service-golang-rest-api](https://200lab.io/blog/ung-dung-clean-architecture-service-golang-rest-api/))
 
 
 
