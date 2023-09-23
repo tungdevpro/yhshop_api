@@ -106,10 +106,10 @@ func (impl *shopRepoImpl) IncrementLikeCount(ctx context.Context, id int) error 
 	return nil
 }
 
-func (impl *shopRepoImpl) DecrementLikeCount(ctx context.Context, id int) error {
+func (impl *shopRepoImpl) DecrementLikeCount(ctx context.Context, shopId int) error {
 	db := impl.appCtx.GetDB()
 
-	if err := db.Table(entity.Shop{}.TableName()).Where("id = ?", id).Update("liked_count", gorm.Expr("liked_count - ?", 1)).Error; err != nil {
+	if err := db.Table(entity.Shop{}.TableName()).Where("id = ?", shopId).Update("liked_count", gorm.Expr("liked_count - ?", 1)).Error; err != nil {
 		return err
 	}
 

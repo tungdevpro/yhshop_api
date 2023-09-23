@@ -12,11 +12,10 @@ import (
 
 type business struct {
 	repo shop.Repository
-	// like shoplike.Business
 }
 
 func NewBusiness(repo shop.Repository) shop.Business {
-	return &business{repo: repo} // like: bizLike
+	return &business{repo: repo}
 
 }
 

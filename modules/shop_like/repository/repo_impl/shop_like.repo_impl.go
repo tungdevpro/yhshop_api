@@ -110,6 +110,7 @@ func (impl *shopLikeRepoImpl) DeleteUserLike(ctx context.Context, userId, shopId
 	if err := db.Table(entity.ShopLike{}.TableName()).Where("user_id = ? and shop_id = ?", userId, shopId).Delete(nil).Error; err != nil {
 		return err
 	}
+
 	_ = impl.shopRepo.DecrementLikeCount(ctx, shopId)
 
 	return nil
