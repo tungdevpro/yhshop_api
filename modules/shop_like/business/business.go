@@ -35,6 +35,10 @@ func (biz *business) GetLikedUsers(ctx context.Context, filter *entity.Filter, p
 	return items, nil
 }
 
-func (biz *business) CreateLikes(ctx context.Context) (*string, error) {
+func (biz *business) CreateUserLike(ctx context.Context, userId, shopId int) (*string, error) {
 	return nil, nil
+}
+
+func (biz *business) DeleteUserLike(ctx context.Context, id int) error {
+	return nil
 }

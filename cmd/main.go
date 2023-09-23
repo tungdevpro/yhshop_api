@@ -3,7 +3,7 @@ package main
 import (
 	"coffee_api/commons"
 	"coffee_api/configs"
-	"coffee_api/configs/prefix"
+	__prefix "coffee_api/configs/prefix"
 	"coffee_api/db"
 	"coffee_api/helpers"
 	"coffee_api/middleware"
@@ -55,38 +55,37 @@ func main() {
 
 	engine.Use(middleware.AuthRequired(*appCtx, jwtHandler))
 
-	v1 := engine.Group(prefix.V1)
+	v1 := engine.Group(__prefix.V1)
 	{
 		// Upload handler
-		v1.POST(prefix.Upload, apiUpload.UploadFile())
+		v1.POST(__prefix.Upload, apiUpload.UploadFile())
 
 		// Authentication handler
-		auth := v1.Group(prefix.Auth)
+		auth := v1.Group(__prefix.Auth)
 		{
-			auth.POST(prefix.Register, apiAuth.RegisterHandler())
-			auth.POST(prefix.Login, apiAuth.LoginHandler())
+			auth.POST(__prefix.Register, apiAuth.RegisterHandler())
+			auth.POST(__prefix.Login, apiAuth.LoginHandler())
 		}
 
 		// User handler
-		user := v1.Group(prefix.User)
+		user := v1.Group(__prefix.User)
 		{
-			user.GET(prefix.Profile, apiUser.GetProfileHandler())
-			user.PUT(prefix.Empty, apiUser.UpdateProfileHandler())
-			user.DELETE(prefix.Empty, apiUser.DeleteUserHandler())
+			user.GET(__prefix.Profile, apiUser.GetProfileHandler())
+			user.PUT(__prefix.Empty, apiUser.UpdateProfileHandler())
+			user.DELETE(__prefix.Empty, apiUser.DeleteUserHandler())
 		}
 
 		// Shop handler
-		shop := v1.Group(prefix.Shop)
+		shop := v1.Group(__prefix.Shop)
 		{
-			shop.POST(prefix.Empty, apiShop.CreateShopHandler())
-			shop.GET(prefix.GetShop, apiShop.GetShopHandler())
-			shop.PUT(prefix.GetShop, apiShop.UpdateShopHandler())
-			shop.DELETE(prefix.DelShop, apiShop.DeleteShopHandler())
-			shop.GET(prefix.LikedUsers, apiShopLike.GetLikedUsersHandler())
-			shop.POST(prefix.CreateLike, apiShopLike.CreateLikesHandler())
+			shop.POST(__prefix.Empty, apiShop.CreateShopHandler())
+			shop.GET(__prefix.GetShop, apiShop.GetShopHandler())
+			shop.PUT(__prefix.GetShop, apiShop.UpdateShopHandler())
+			shop.DELETE(__prefix.DelShop, apiShop.DeleteShopHandler())
+			shop.GET(__prefix.LikedUsers, apiShopLike.GetLikedUsersHandler())
+			shop.POST(__prefix.DeleteUserLike, apiShopLike.CreateUserLikeHandler())
 		}
-		v1.GET(prefix.ListShop, apiShop.ListShopHandler())
-
+		v1.GET(__prefix.ListShop, apiShop.ListShopHandler())
 	}
 
 	if err := engine.Run(fmt.Sprintf(":%s", cfg.Port)); err != nil {

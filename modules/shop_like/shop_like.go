@@ -11,17 +11,20 @@ import (
 type API interface {
 	GetShopLikesHandler() gin.HandlerFunc
 	GetLikedUsersHandler() gin.HandlerFunc
-	CreateLikesHandler() gin.HandlerFunc
+	CreateUserLikeHandler() gin.HandlerFunc
+	DeleteUserLikeHandler() gin.HandlerFunc
 }
 
 type Business interface {
 	GetShopLikes(context.Context, []int) (map[int]int, error)
 	GetLikedUsers(context.Context, *entity.Filter, *commons.Paging) ([]commons.SimpleUser, error)
-	CreateLikes(context.Context) (*string, error)
+	CreateUserLike(context.Context, int, int) (*string, error)
+	DeleteUserLike(context.Context, int) error
 }
 
 type Repository interface {
 	GetShopLikes(context.Context, []int) (map[int]int, error)
 	GetLikedUsers(context.Context, *entity.Filter, *commons.Paging) ([]commons.SimpleUser, error)
-	CreateLikes(context.Context) (*string, error)
+	CreateUserLike(context.Context, int, int) (*string, error)
+	DeleteUserLike(context.Context, int) error
 }

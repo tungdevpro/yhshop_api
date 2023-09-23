@@ -78,6 +78,15 @@ func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.
 	return items, nil
 }
 
-func (impl *shopLikeRepoImpl) CreateLikes(ctx context.Context) (*string, error) {
+func (impl *shopLikeRepoImpl) CreateUserLike(ctx context.Context, userId, shopId int) (*string, error) {
+	impl.appCtx.L.Lock()
+	defer impl.appCtx.L.Unlock()
+
+	// db := impl.appCtx.GetDB()
+
 	return nil, nil
+}
+
+func (impl *shopLikeRepoImpl) DeleteUserLike(ctx context.Context, id int) error {
+	return nil
 }
