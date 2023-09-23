@@ -5,6 +5,7 @@ import (
 	shoplike "coffee_api/modules/shop_like"
 	"coffee_api/modules/shop_like/entity"
 	"context"
+	"fmt"
 )
 
 type shopLikeRepoImpl struct {
@@ -78,15 +79,32 @@ func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.
 	return items, nil
 }
 
-func (impl *shopLikeRepoImpl) CreateUserLike(ctx context.Context, userId, shopId int) (*string, error) {
+func (impl *shopLikeRepoImpl) CreateUserLike(ctx context.Context, userId, shopId int) (string, error) {
 	impl.appCtx.L.Lock()
 	defer impl.appCtx.L.Unlock()
 
-	// db := impl.appCtx.GetDB()
+	db := impl.appCtx.GetDB()
 
-	return nil, nil
+	data := entity.ShopLike{
+		ShopId: shopId,
+		UserId: userId,
+	}
+
+	if err := db.Table(entity.ShopLike{}.TableName()).Create(&data).Error; err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%d", data.ShopId), nil
 }
 
-func (impl *shopLikeRepoImpl) DeleteUserLike(ctx context.Context, id int) error {
+func (impl *shopLikeRepoImpl) DeleteUserLike(ctx context.Context, userId, shopId int) error {
+	impl.appCtx.L.Lock()
+	defer impl.appCtx.L.Unlock()
+
+	db := impl.appCtx.GetDB()
+
+	if err := db.Table(entity.ShopLike{}.TableName()).Where("user_id = ? and shop_id = ?", userId, shopId).Delete(nil).Error; err != nil {
+		return err
+	}
 	return nil
 }

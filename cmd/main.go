@@ -83,7 +83,9 @@ func main() {
 			shop.PUT(__prefix.GetShop, apiShop.UpdateShopHandler())
 			shop.DELETE(__prefix.DelShop, apiShop.DeleteShopHandler())
 			shop.GET(__prefix.LikedUsers, apiShopLike.GetLikedUsersHandler())
-			shop.POST(__prefix.DeleteUserLike, apiShopLike.CreateUserLikeHandler())
+			shop.POST(__prefix.CreateUserLike, apiShopLike.CreateUserLikeHandler())
+			shop.DELETE(__prefix.DeleteUserLike, apiShopLike.DeleteUserLikeHandler())
+
 		}
 		v1.GET(__prefix.ListShop, apiShop.ListShopHandler())
 	}

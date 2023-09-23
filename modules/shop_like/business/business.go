@@ -35,10 +35,19 @@ func (biz *business) GetLikedUsers(ctx context.Context, filter *entity.Filter, p
 	return items, nil
 }
 
-func (biz *business) CreateUserLike(ctx context.Context, userId, shopId int) (*string, error) {
-	return nil, nil
+func (biz *business) CreateUserLike(ctx context.Context, userId, shopId int) (string, error) {
+	id, err := biz.repo.CreateUserLike(ctx, userId, shopId)
+	if err != nil {
+		return "", err
+	}
+
+	return id, nil
 }
 
-func (biz *business) DeleteUserLike(ctx context.Context, id int) error {
+func (biz *business) DeleteUserLike(ctx context.Context, userId, shopId int) error {
+	if err := biz.repo.DeleteUserLike(ctx, userId, shopId); err != nil {
+		return err
+	}
+
 	return nil
 }

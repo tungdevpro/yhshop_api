@@ -62,7 +62,7 @@ func (api *api) CreateUserLikeHandler() gin.HandlerFunc {
 			return
 		}
 
-		id, err := hashids.DecodeHash([]byte(string(idParam)))
+		hashId, err := hashids.DecodeHash([]byte(string(idParam)))
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
 			return
@@ -71,14 +71,49 @@ func (api *api) CreateUserLikeHandler() gin.HandlerFunc {
 		requester := ctx.MustGet(commons.CurrentUser).(commons.Requester)
 
 		data := entity.ShopLike{
-			ShopId: int(id),
+			ShopId: int(hashId),
 			UserId: requester.GetUserId(),
 		}
 
-		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(data))
+		id, err := api.biz.CreateUserLike(ctx.Request.Context(), data.UserId, data.ShopId)
+
+		if err != nil {
+			if err != nil {
+				ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+				return
+			}
+		}
+
+		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(id))
 	}
 }
 
 func (api *api) DeleteUserLikeHandler() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
+	return func(ctx *gin.Context) {
+		idParam := ctx.Param("id")
+		if idParam == "" {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, entity.EmptyParamIdShop.Error()))
+			return
+		}
+
+		hashId, err := hashids.DecodeHash([]byte(string(idParam)))
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
+		}
+
+		requester := ctx.MustGet(commons.CurrentUser).(commons.Requester)
+
+		data := entity.ShopLike{
+			ShopId: int(hashId),
+			UserId: requester.GetUserId(),
+		}
+
+		if err := api.biz.DeleteUserLike(ctx.Request.Context(), data.UserId, data.ShopId); err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
+		}
+
+		ctx.JSON(http.StatusOK, commons.SimpleSuccessResp(true))
+	}
 }

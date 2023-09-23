@@ -23,7 +23,7 @@ const (
 	DelShop        = "/:id"
 	LikedUsers     = "/:id/liked-user"
 	CreateUserLike = "/:id/like"
-	DeleteUserLike = "/:id/like"
+	DeleteUserLike = "/:id/unlike"
 
 	// Shipper
 	Shipper     = "/shipper"

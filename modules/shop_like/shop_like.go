@@ -18,13 +18,13 @@ type API interface {
 type Business interface {
 	GetShopLikes(context.Context, []int) (map[int]int, error)
 	GetLikedUsers(context.Context, *entity.Filter, *commons.Paging) ([]commons.SimpleUser, error)
-	CreateUserLike(context.Context, int, int) (*string, error)
-	DeleteUserLike(context.Context, int) error
+	CreateUserLike(context.Context, int, int) (string, error)
+	DeleteUserLike(context.Context, int, int) error
 }
 
 type Repository interface {
 	GetShopLikes(context.Context, []int) (map[int]int, error)
 	GetLikedUsers(context.Context, *entity.Filter, *commons.Paging) ([]commons.SimpleUser, error)
-	CreateUserLike(context.Context, int, int) (*string, error)
-	DeleteUserLike(context.Context, int) error
+	CreateUserLike(context.Context, int, int) (string, error)
+	DeleteUserLike(context.Context, int, int) error
 }
