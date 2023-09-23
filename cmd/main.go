@@ -43,16 +43,18 @@ func main() {
 	}
 
 	appCtx := commons.NewAppContext(db, cfg)
+	jwtHandler := bizJwt.NewBusiness(implJwt.NewJwtExploreRepoImpl(*appCtx))
 	apiUpload := restUpload.NewApi(bizUpload.NewBusiness(implUpload.NewUploadRepoImpl(*appCtx)))
+
 	apiAuth := restAuth.NewApi(bizAuth.NewBusiness(implAuth.NewAuthRepoImpl(*appCtx)))
 	apiUser := restUser.NewApi(bizUser.NewBusiness(implUser.NewUserRepoImpl(*appCtx)))
-	newBizShopLike := bizShopLike.NewBusiness(implShopLike.NewShopLikeRepoImpl(*appCtx))
-	apiShopLike := restShopLike.NewApi(newBizShopLike)
-	apiShop := restShop.NewApi(bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx), newBizShopLike))
-	jwtHandler := bizJwt.NewBusiness(implJwt.NewJwtExploreRepoImpl(*appCtx))
+
+	__implShop := implShop.NewShopRepoImpl(*appCtx)
+	__implShopLike := implShopLike.NewShopLikeRepoImpl(*appCtx, __implShop)
+	apiShopLike := restShopLike.NewApi(bizShopLike.NewBusiness(__implShopLike))
+	apiShop := restShop.NewApi(bizShop.NewBusiness(__implShop))
 
 	engine := gin.Default()
-
 	engine.Use(middleware.AuthRequired(*appCtx, jwtHandler))
 
 	v1 := engine.Group(__prefix.V1)

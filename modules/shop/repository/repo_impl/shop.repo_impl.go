@@ -7,6 +7,7 @@ import (
 	"context"
 
 	"github.com/indrasaputra/hashids"
+	"gorm.io/gorm"
 )
 
 type shopRepoImpl struct {
@@ -93,4 +94,24 @@ func (impl *shopRepoImpl) CreateShop(ctx context.Context, dto *entity.CreateShop
 }
 func (impl *shopRepoImpl) DeleteShop(ctx context.Context, id string) bool {
 	return true
+}
+
+func (impl *shopRepoImpl) IncrementLikeCount(ctx context.Context, id int) error {
+	db := impl.appCtx.GetDB()
+
+	if err := db.Table(entity.Shop{}.TableName()).Where("id = ?", id).Update("liked_count", gorm.Expr("liked_count + ?", 1)).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (impl *shopRepoImpl) DecrementLikeCount(ctx context.Context, id int) error {
+	db := impl.appCtx.GetDB()
+
+	if err := db.Table(entity.Shop{}.TableName()).Where("id = ?", id).Update("liked_count", gorm.Expr("liked_count - ?", 1)).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

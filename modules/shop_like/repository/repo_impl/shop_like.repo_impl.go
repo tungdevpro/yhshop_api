@@ -2,6 +2,7 @@ package repoimpl
 
 import (
 	"coffee_api/commons"
+	"coffee_api/modules/shop"
 	shoplike "coffee_api/modules/shop_like"
 	"coffee_api/modules/shop_like/entity"
 	"context"
@@ -9,12 +10,14 @@ import (
 )
 
 type shopLikeRepoImpl struct {
-	appCtx commons.AppContext
+	appCtx   commons.AppContext
+	shopRepo shop.Repository
 }
 
-func NewShopLikeRepoImpl(appCtx commons.AppContext) shoplike.Repository {
+func NewShopLikeRepoImpl(appCtx commons.AppContext, shopRepo shop.Repository) shoplike.Repository {
 	return &shopLikeRepoImpl{
-		appCtx: appCtx,
+		appCtx:   appCtx,
+		shopRepo: shopRepo,
 	}
 }
 
@@ -94,6 +97,7 @@ func (impl *shopLikeRepoImpl) CreateUserLike(ctx context.Context, userId, shopId
 		return "", err
 	}
 
+	_ = impl.shopRepo.IncrementLikeCount(ctx, data.ShopId)
 	return fmt.Sprintf("%d", data.ShopId), nil
 }
 
@@ -106,5 +110,7 @@ func (impl *shopLikeRepoImpl) DeleteUserLike(ctx context.Context, userId, shopId
 	if err := db.Table(entity.ShopLike{}.TableName()).Where("user_id = ? and shop_id = ?", userId, shopId).Delete(nil).Error; err != nil {
 		return err
 	}
+	_ = impl.shopRepo.DecrementLikeCount(ctx, shopId)
+
 	return nil
 }
