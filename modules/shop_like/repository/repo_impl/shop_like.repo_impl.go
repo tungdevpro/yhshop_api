@@ -97,7 +97,12 @@ func (impl *shopLikeRepoImpl) CreateUserLike(ctx context.Context, userId, shopId
 		return "", err
 	}
 
-	_ = impl.shopRepo.IncrementLikeCount(ctx, data.ShopId)
+	// Ở case này sẽ không tốn time khi call update liked_count, nhưng với những trường hợp khác dùng goroutine sẽ tốt hơn
+	go func() {
+		defer commons.Recover(impl.appCtx)
+		_ = impl.shopRepo.IncrementLikeCount(ctx, data.ShopId)
+	}()
+
 	return fmt.Sprintf("%d", data.ShopId), nil
 }
 
@@ -111,7 +116,10 @@ func (impl *shopLikeRepoImpl) DeleteUserLike(ctx context.Context, userId, shopId
 		return err
 	}
 
-	_ = impl.shopRepo.DecrementLikeCount(ctx, shopId)
+	go func() {
+		defer commons.Recover(impl.appCtx)
+		_ = impl.shopRepo.DecrementLikeCount(ctx, shopId)
+	}()
 
 	return nil
 }
