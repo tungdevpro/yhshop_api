@@ -49,10 +49,10 @@ func main() {
 	apiAuth := restAuth.NewApi(bizAuth.NewBusiness(implAuth.NewAuthRepoImpl(*appCtx)))
 	apiUser := restUser.NewApi(bizUser.NewBusiness(implUser.NewUserRepoImpl(*appCtx)))
 
-	__implShop := implShop.NewShopRepoImpl(*appCtx)
-	__implShopLike := implShopLike.NewShopLikeRepoImpl(*appCtx, __implShop)
-	apiShopLike := restShopLike.NewApi(bizShopLike.NewBusiness(__implShopLike))
-	apiShop := restShop.NewApi(bizShop.NewBusiness(__implShop))
+	bizShop := bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx))
+	__implShopLike := implShopLike.NewShopLikeRepoImpl(*appCtx)
+	apiShopLike := restShopLike.NewApi(bizShopLike.NewBusiness(__implShopLike, bizShop))
+	apiShop := restShop.NewApi(bizShop)
 
 	engine := gin.Default()
 	engine.Use(middleware.AuthRequired(*appCtx, jwtHandler))

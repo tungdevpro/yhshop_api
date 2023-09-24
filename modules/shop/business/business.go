@@ -70,3 +70,21 @@ func (biz *business) CreateShop(ctx context.Context, dto *entity.CreateShopDTO) 
 func (biz *business) DeleteShop(ctx context.Context, id string) bool {
 	return false
 }
+
+func (biz *business) IncrementLikeCount(ctx context.Context, id int) error {
+	err := biz.repo.IncrementLikeCount(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (biz *business) DecrementLikeCount(ctx context.Context, id int) error {
+	err := biz.repo.DecrementLikeCount(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

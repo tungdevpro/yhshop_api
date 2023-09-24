@@ -21,6 +21,8 @@ type Business interface {
 	GetShopById(context.Context, string) (*entity.Shop, error)
 	CreateShop(context.Context, *entity.CreateShopDTO) (string, error)
 	DeleteShop(context.Context, string) bool
+	IncrementLikeCount(context.Context, int) error
+	DecrementLikeCount(context.Context, int) error
 }
 
 type Repository interface {

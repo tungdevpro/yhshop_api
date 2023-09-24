@@ -2,7 +2,6 @@ package repoimpl
 
 import (
 	"coffee_api/commons"
-	"coffee_api/modules/shop"
 	shoplike "coffee_api/modules/shop_like"
 	"coffee_api/modules/shop_like/entity"
 	"context"
@@ -10,14 +9,14 @@ import (
 )
 
 type shopLikeRepoImpl struct {
-	appCtx   commons.AppContext
-	shopRepo shop.Repository
+	appCtx commons.AppContext
+	// shopRepo shop.Repository
 }
 
-func NewShopLikeRepoImpl(appCtx commons.AppContext, shopRepo shop.Repository) shoplike.Repository {
+func NewShopLikeRepoImpl(appCtx commons.AppContext) shoplike.Repository {
 	return &shopLikeRepoImpl{
-		appCtx:   appCtx,
-		shopRepo: shopRepo,
+		appCtx: appCtx,
+		// shopRepo: shopRepo,
 	}
 }
 
@@ -98,10 +97,10 @@ func (impl *shopLikeRepoImpl) CreateUserLike(ctx context.Context, userId, shopId
 	}
 
 	// Ở case này sẽ không tốn time khi call update liked_count, nhưng với những trường hợp khác dùng goroutine sẽ tốt hơn
-	go func() {
-		defer commons.Recover(impl.appCtx)
-		_ = impl.shopRepo.IncrementLikeCount(ctx, data.ShopId)
-	}()
+	// go func() {
+	// 	defer commons.Recover(impl.appCtx)
+	// 	_ = impl.shopRepo.IncrementLikeCount(ctx, data.ShopId)
+	// }()
 
 	return fmt.Sprintf("%d", data.ShopId), nil
 }
@@ -116,10 +115,10 @@ func (impl *shopLikeRepoImpl) DeleteUserLike(ctx context.Context, userId, shopId
 		return err
 	}
 
-	go func() {
-		defer commons.Recover(impl.appCtx)
-		_ = impl.shopRepo.DecrementLikeCount(ctx, shopId)
-	}()
+	// go func() {
+	// 	defer commons.Recover(impl.appCtx)
+	// 	_ = impl.shopRepo.DecrementLikeCount(ctx, shopId)
+	// }()
 
 	return nil
 }
