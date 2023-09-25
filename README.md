@@ -1,4 +1,4 @@
-# ShopLine Order Application
+# YHShop Order Application
 
 The project simulates features, purchases, and deliveries
 
