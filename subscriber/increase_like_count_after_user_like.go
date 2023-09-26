@@ -9,10 +9,11 @@ import (
 func IncreaseLikeCountAfterUserLike(appCtx commons.AppContext, ctx context.Context) {
 	c, _ := appCtx.GetPubSub().Subscribe(ctx, commons.TopicUserLikeShop)
 
+	fmt.Println("run hehe...")
 	go func() {
 		for {
 			msg := <-c
-			fmt.Println("msg: >> ", msg)
+			fmt.Println("msg: >> ", msg.Data())
 		}
 	}()
 }
