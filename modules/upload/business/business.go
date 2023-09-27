@@ -39,7 +39,7 @@ func (biz *business) UploadFile(ctx context.Context, uploadDto *entity.UploadDTO
 	}
 
 	fileExt := filepath.Ext(doc.FileName)
-	doc.Dst = fmt.Sprintf("%s/%d-%s%s", doc.Folder, time.Now().Nanosecond(), helpers.SnakeCase(doc.FileName), fileExt)
+	doc.Dst = fmt.Sprintf("%s/%d-%s%s", doc.Folder, time.Now().UnixNano(), helpers.SnakeCase(doc.FileName), fileExt)
 
 	img, err := biz.repository.UploadFile(ctx, doc)
 	img.Width = width

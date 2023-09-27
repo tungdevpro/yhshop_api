@@ -2,19 +2,26 @@ package business
 
 import (
 	"coffee_api/commons"
+	asyncjob "coffee_api/commons/async_job"
+	"coffee_api/modules/shop"
 	shoplike "coffee_api/modules/shop_like"
 	"coffee_api/modules/shop_like/entity"
+	"coffee_api/pubsub"
 	"context"
 	"fmt"
 )
 
 type business struct {
-	repo shoplike.Repository
+	repo    shoplike.Repository
+	bizShop shop.Business
+	pubsub  pubsub.Pubsub
 }
 
-func NewBusiness(repo shoplike.Repository) shoplike.Business {
+func NewBusiness(repo shoplike.Repository, bizShop shop.Business, pubsub pubsub.Pubsub) shoplike.Business {
 	return &business{
-		repo: repo,
+		repo:    repo,
+		bizShop: bizShop,
+		pubsub:  pubsub,
 	}
 }
 
@@ -41,6 +48,18 @@ func (biz *business) CreateUserLike(ctx context.Context, userId, shopId int) (st
 		return "", err
 	}
 
+	data := entity.Filter{
+		ShopId: shopId,
+		UserId: userId,
+	}
+
+	_ = biz.pubsub.Publish(ctx, commons.TopicUserLikeShop, pubsub.NewMessage(data))
+	fmt.Println("hello world...")
+	// job := asyncjob.NewJob(func(ctx context.Context) error {
+	// 	return biz.bizShop.IncrementLikeCount(ctx, shopId)
+	// })
+
+	// _ = asyncjob.NewGroup(true, job).Run(ctx)
 	return id, nil
 }
 
@@ -48,6 +67,12 @@ func (biz *business) DeleteUserLike(ctx context.Context, userId, shopId int) err
 	if err := biz.repo.DeleteUserLike(ctx, userId, shopId); err != nil {
 		return err
 	}
+
+	job := asyncjob.NewJob(func(ctx context.Context) error {
+		return biz.bizShop.DecrementLikeCount(ctx, shopId)
+	})
+
+	_ = asyncjob.NewGroup(true, job).Run(ctx)
 
 	return nil
 }
