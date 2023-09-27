@@ -45,7 +45,6 @@ func main() {
 	}
 
 	appCtx := commons.NewAppContext(db, cfg, pblocal.NewPubSub())
-	subscriber.Setup(*appCtx)
 	jwtHandler := bizJwt.NewBusiness(implJwt.NewJwtExploreRepoImpl(*appCtx))
 	apiUpload := restUpload.NewApi(bizUpload.NewBusiness(implUpload.NewUploadRepoImpl(*appCtx)))
 
@@ -57,6 +56,7 @@ func main() {
 	apiShopLike := restShopLike.NewApi(bizShopLike.NewBusiness(__implShopLike, bizShop, appCtx.GetPubSub()))
 	apiShop := restShop.NewApi(bizShop)
 
+	subscriber.Setup(*appCtx)
 	engine := gin.Default()
 	engine.Use(middleware.AuthRequired(*appCtx, jwtHandler))
 
