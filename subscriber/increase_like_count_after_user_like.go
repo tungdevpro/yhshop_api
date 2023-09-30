@@ -3,17 +3,16 @@ package subscriber
 import (
 	"coffee_api/commons"
 	"context"
-	"fmt"
+	"log"
 )
 
 func IncreaseLikeCountAfterUserLike(appCtx commons.AppContext, ctx context.Context) {
 	c, _ := appCtx.GetPubSub().Subscribe(ctx, commons.TopicUserLikeShop)
-
-	fmt.Println("run hehe...")
 	go func() {
 		for {
 			msg := <-c
-			fmt.Println("msg: >> ", msg.Data())
+			log.Println("New event published:", msg.Data())
 		}
 	}()
+
 }
