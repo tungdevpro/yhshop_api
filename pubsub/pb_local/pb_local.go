@@ -29,6 +29,7 @@ func (ps *localPubSub) Publish(ctx context.Context, channel pubsub.Topic, data *
 	data.SetChannel(channel)
 
 	go func() {
+		// defer commons.Recover(appCtx)
 		ps.messageQueue <- data
 		log.Println("New event published:", data.String())
 	}()
