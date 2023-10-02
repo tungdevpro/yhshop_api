@@ -24,10 +24,10 @@ func NewAppContext(db *gorm.DB, cfg *configs.Configuration, pb pubsub.Pubsub) *A
 	}
 }
 
-func (ctx *AppContext) GetDB() *gorm.DB {
-	return ctx.db.Session(&gorm.Session{})
+func (appCtx *AppContext) GetDB() *gorm.DB {
+	return appCtx.db.Session(&gorm.Session{})
 }
 
-func (app *AppContext) GetPubSub() pubsub.Pubsub {
-	return app.pb
+func (appCtx *AppContext) GetPubSub() pubsub.Pubsub {
+	return appCtx.pb
 }
