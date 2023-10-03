@@ -29,9 +29,11 @@ func (ps *localPubSub) Publish(ctx context.Context, channel pubsub.Topic, data *
 	data.SetChannel(channel)
 
 	go func() {
-		// defer commons.Recover(appCtx)
+		// defer commons.Recover(ctx)
 		ps.messageQueue <- data
 		log.Println("New event published:", data.String())
+		log.Println("Get data demo:", data.Data())
+
 	}()
 	return nil
 }
@@ -47,6 +49,8 @@ func (ps *localPubSub) Subscribe(ctx context.Context, channel pubsub.Topic) (ch 
 		ps.mapChannel[channel] = []chan *pubsub.Message{c}
 	}
 	ps.locker.Unlock()
+
+	// log.Fatalln("run goroutine....")
 
 	return c, func() {
 		log.Println("Unsubscribe")

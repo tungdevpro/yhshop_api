@@ -9,6 +9,7 @@ import (
 	"coffee_api/middleware"
 	bizJwt "coffee_api/middleware/jwt_explore/business"
 	implJwt "coffee_api/middleware/jwt_explore/repository/repo_impl"
+	"coffee_api/pubsub"
 	pblocal "coffee_api/pubsub/pb_local"
 	"coffee_api/subscriber"
 
@@ -44,7 +45,9 @@ func main() {
 		helpers.Fatal(err)
 	}
 
-	appCtx := commons.NewAppContext(db, cfg, pblocal.NewPubSub())
+	var pb pubsub.Pubsub = pblocal.NewPubSub()
+	appCtx := commons.NewAppContext(db, cfg, pb)
+
 	jwtHandler := bizJwt.NewBusiness(implJwt.NewJwtExploreRepoImpl(*appCtx))
 	apiUpload := restUpload.NewApi(bizUpload.NewBusiness(implUpload.NewUploadRepoImpl(*appCtx)))
 
