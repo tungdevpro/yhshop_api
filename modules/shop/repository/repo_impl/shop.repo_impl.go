@@ -5,6 +5,7 @@ import (
 	"coffee_api/modules/shop"
 	"coffee_api/modules/shop/entity"
 	"context"
+	"fmt"
 
 	"github.com/indrasaputra/hashids"
 	"gorm.io/gorm"
@@ -98,6 +99,8 @@ func (impl *shopRepoImpl) DeleteShop(ctx context.Context, id string) bool {
 
 func (impl *shopRepoImpl) IncrementLikeCount(ctx context.Context, id int) error {
 	db := impl.appCtx.GetDB()
+
+	fmt.Println("what your name....")
 
 	if err := db.Table(entity.Shop{}.TableName()).Where("id = ?", id).Update("liked_count", gorm.Expr("liked_count + ?", 1)).Error; err != nil {
 		return err
