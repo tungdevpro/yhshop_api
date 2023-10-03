@@ -82,8 +82,8 @@ func (impl *shopLikeRepoImpl) GetLikedUsers(ctx context.Context, filter *entity.
 }
 
 func (impl *shopLikeRepoImpl) CreateUserLike(ctx context.Context, userId, shopId int) (string, error) {
-	impl.appCtx.L.Lock()
-	defer impl.appCtx.L.Unlock()
+	// impl.appCtx.L.Lock()
+	// defer impl.appCtx.L.Unlock()
 
 	db := impl.appCtx.GetDB()
 

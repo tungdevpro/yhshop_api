@@ -54,7 +54,6 @@ func (biz *business) CreateUserLike(ctx context.Context, userId, shopId int) (st
 	}
 
 	_ = biz.pubsub.Publish(ctx, commons.TopicUserLikeShop, pubsub.NewMessage(data))
-	fmt.Println("hello world...")
 	// job := asyncjob.NewJob(func(ctx context.Context) error {
 	// 	return biz.bizShop.IncrementLikeCount(ctx, shopId)
 	// })
