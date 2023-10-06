@@ -36,6 +36,10 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	socketio "github.com/googollee/go-socket.io"
+	"github.com/googollee/go-socket.io/engineio"
+	"github.com/googollee/go-socket.io/engineio/transport"
+	"github.com/googollee/go-socket.io/engineio/transport/websocket"
 )
 
 func main() {
@@ -98,7 +102,22 @@ func main() {
 		v1.GET(__prefix.ListShop, apiShop.ListShopHandler())
 	}
 
+	// startSocketIOServer(engine)
 	if err := engine.Run(fmt.Sprintf(":%s", cfg.Port)); err != nil {
 		helpers.Fatal(err)
 	}
+}
+
+func startSocketIOServer(engine *gin.Engine) {
+	server := socketio.NewServer(&engineio.Options{
+		Transports: []transport.Transport{websocket.Default},
+	})
+
+	server.OnConnect("/", func(c socketio.Conn) error {
+		c.SetContext("")
+		fmt.Println("connected: ", c.ID(), "IP: ", c.RemoteAddr())
+		return nil
+	})
+
+	go server.Serve()
 }
