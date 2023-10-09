@@ -13,6 +13,8 @@ import (
 	pblocal "coffee_api/pubsub/pb_local"
 	"coffee_api/subscriber"
 
+	ps "coffee_api/internal/infra/pubsub"
+
 	bizAuth "coffee_api/modules/auth/business"
 	implAuth "coffee_api/modules/auth/repository/repo_impl"
 	restAuth "coffee_api/modules/auth/transport/rest"
@@ -48,6 +50,17 @@ func main() {
 	if err != nil {
 		helpers.Fatal(err)
 	}
+
+	var pub = ps.NewPubSub()
+
+	go func() {
+		x := pub.Subscribe("topic-user")
+		fmt.Println("x-->", x)
+	}()
+
+	go func() {
+		pub.Publish("topic-user", "devtungpro")
+	}()
 
 	var pb pubsub.Pubsub = pblocal.NewPubSub()
 	appCtx := commons.NewAppContext(db, cfg, pb)
