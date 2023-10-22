@@ -1,9 +1,10 @@
 package commons
 
 import (
+	"sync"
+
 	"coffee_api/configs"
 	"coffee_api/pubsub"
-	"sync"
 
 	"gorm.io/gorm"
 )
@@ -24,10 +25,6 @@ func NewAppContext(db *gorm.DB, cfg *configs.Configuration, pb pubsub.Pubsub) *A
 	}
 }
 
-func (appCtx *AppContext) GetDB() *gorm.DB {
-	return appCtx.db.Session(&gorm.Session{})
-}
+func (appCtx *AppContext) GetDB() *gorm.DB { return appCtx.db.Session(&gorm.Session{}) }
 
-func (appCtx *AppContext) GetPubSub() pubsub.Pubsub {
-	return appCtx.pb
-}
+func (appCtx *AppContext) GetPubSub() pubsub.Pubsub { return appCtx.pb }
