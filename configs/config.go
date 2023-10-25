@@ -20,6 +20,7 @@ type Configuration struct {
 	EmailSenderName     string `env:"EMAIL_SENDER_NAME,required"`
 	EmailSenderAddress  string `env:"EMAIL_SENDER_ADDRESS,required"`
 	EmailSenderPassword string `env:"EMAIL_SENDER_PASSWORD,required"`
+	ApplicationName     string `env:"APPLICATION_NAME,required"`
 }
 
 func NewConfiguration() *Configuration {
