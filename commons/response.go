@@ -2,7 +2,7 @@ package commons
 
 type successResponse struct {
 	StatusCode int         `json:"code"`
-	Message    string      `json:"msg"`
+	Message    string      `json:"message"`
 	Data       interface{} `json:"data"`
 	Paging     interface{} `json:"paging,omitempty"`
 	Filter     interface{} `json:"filter,omitempty"`
@@ -34,7 +34,7 @@ func NewSuccessResp(data interface{}, paging interface{}, filter interface{}) *s
 
 type AppError struct {
 	StatusCode int    `json:"code"`
-	Message    string `json:"msg"`
+	Message    string `json:"message"`
 }
 
 func NewAppError(code int, msg string) *AppError {
