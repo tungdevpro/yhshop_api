@@ -2,6 +2,7 @@ package repoimpl
 
 import (
 	"coffee_api/commons"
+	"coffee_api/helpers"
 	"coffee_api/middleware"
 	"coffee_api/modules/auth"
 	"coffee_api/modules/auth/entity"
@@ -9,6 +10,7 @@ import (
 	userEntity "coffee_api/modules/user/entity"
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/indrasaputra/hashids"
 	"gorm.io/gorm"
@@ -63,6 +65,23 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 				Email:       doc.Email,
 				FullName:    doc.FullName,
 			}
+
+			otp := helpers.EncodeToString(5)
+			subject := "Account authentication"
+			content := fmt.Sprintf(`
+			<h1>Hi! %s</h1>
+			<p>
+			Thank you for choosing %s. Use the following OTP to complete your Sign Up procedures. OTP is valid for 5 minutes
+			</p>
+			<h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">%s</h2>
+			`, doc.FullName, r.appCtx.Cfg.ApplicationName, otp)
+			to := []string{doc.Email}
+
+			err = r.appCtx.Mailer.SendEmail(subject, content, to, nil, nil, nil)
+			if err != nil {
+				return nil, err
+			}
+
 			db.Commit()
 			return &resp, nil
 		}

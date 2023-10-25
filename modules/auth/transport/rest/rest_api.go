@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"coffee_api/commons"
+	"coffee_api/commons/mail"
+	"coffee_api/configs"
 	"coffee_api/modules/auth"
 	"coffee_api/modules/auth/entity"
 
@@ -59,5 +61,20 @@ func (api *api) LoginHandler() gin.HandlerFunc {
 }
 
 func (api *api) VerifyMail() gin.HandlerFunc {
-	return func(ctx *gin.Context) {}
+	return func(ctx *gin.Context) {
+		cfg := configs.NewConfiguration()
+		sender := mail.NewGmailSender(cfg.EmailSenderName, cfg.EmailSenderAddress, cfg.EmailSenderPassword)
+
+		subject := "this is subject"
+		content := `
+			<h1>Hello world</h1>
+			`
+		to := []string{"tungdm@weupgroup.vn"}
+
+		err := sender.SendEmail(subject, content, to, nil, nil, nil)
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+		}
+		// 		require.NoError(t, err)
+	}
 }
