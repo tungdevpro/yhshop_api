@@ -57,3 +57,7 @@ func (api *api) LoginHandler() gin.HandlerFunc {
 		ctx.JSON(http.StatusOK, commons.CreateNewSuccessResp(result, entity.MsgLoginSuccess))
 	}
 }
+
+func (api *api) VerifyMail() gin.HandlerFunc {
+	return func(ctx *gin.Context) {}
+}

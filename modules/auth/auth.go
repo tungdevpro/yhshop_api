@@ -1,8 +1,9 @@
 package auth
 
 import (
-	"coffee_api/modules/auth/entity"
 	"context"
+
+	"coffee_api/modules/auth/entity"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,4 +21,5 @@ type Repository interface {
 type API interface {
 	LoginHandler() gin.HandlerFunc
 	RegisterHandler() gin.HandlerFunc
+	VerifyMail() gin.HandlerFunc
 }
