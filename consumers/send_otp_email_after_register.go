@@ -7,7 +7,6 @@ import (
 	"coffee_api/pubsub"
 	"context"
 	"encoding/json"
-	"log"
 )
 
 func SendOTPEmailAfterRegister(appCtx commons.AppContext) consumerJob {
@@ -25,13 +24,12 @@ func SendOTPEmailAfterRegister(appCtx commons.AppContext) consumerJob {
 			if err != nil {
 				return err
 			}
-			param := &entity.VerifyMail{}
+			param := entity.VerifyMail{}
 			if err := json.Unmarshal(jsonbody, &param); err != nil {
-				log.Println("e22: ", err)
 				return err
 			}
 
-			_ = impl.CreateMail(ctx, *param)
+			_ = impl.CreateMail(ctx, param)
 
 			return nil
 		},
