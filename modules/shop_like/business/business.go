@@ -6,7 +6,6 @@ import (
 	"coffee_api/modules/shop"
 	shoplike "coffee_api/modules/shop_like"
 	"coffee_api/modules/shop_like/entity"
-	"coffee_api/pubsub"
 	"context"
 	"fmt"
 )
@@ -14,14 +13,14 @@ import (
 type business struct {
 	repo    shoplike.Repository
 	bizShop shop.Business
-	pubsub  pubsub.Pubsub
+	// pubsub  pubsub.Pubsub
 }
 
-func NewBusiness(repo shoplike.Repository, bizShop shop.Business, pubsub pubsub.Pubsub) shoplike.Business {
+func NewBusiness(repo shoplike.Repository, bizShop shop.Business) shoplike.Business {
 	return &business{
 		repo:    repo,
 		bizShop: bizShop,
-		pubsub:  pubsub,
+		// pubsub:  pubsub,
 	}
 }
 
@@ -48,12 +47,12 @@ func (biz *business) CreateUserLike(ctx context.Context, userId, shopId int) (st
 		return "", err
 	}
 
-	data := entity.Filter{
-		ShopId: shopId,
-		UserId: userId,
-	}
+	// data := entity.Filter{
+	// 	ShopId: shopId,
+	// 	UserId: userId,
+	// }
 
-	_ = biz.pubsub.Publish(ctx, commons.TopicUserLikeShop, pubsub.NewMessage(data))
+	// _ = biz.pubsub.Publish(ctx, commons.TopicUserLikeShop, pubsub.NewMessage(data))
 	// job := asyncjob.NewJob(func(ctx context.Context) error {
 	// 	return biz.bizShop.IncrementLikeCount(ctx, shopId)
 	// })

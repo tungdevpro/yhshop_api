@@ -7,16 +7,20 @@ import (
 	"sync"
 )
 
+// A pb run locally (in-mem)
+// It has a queue (buffer channel) at it's core and many group of subscribers.
+// Because we want to send a message with a specific topic for many subscribers in a group can handle.
+
 type localPubSub struct {
 	messageQueue chan *pubsub.Message
-	mapChannel   map[pubsub.Topic][]chan *pubsub.Message
+	mapChannel   map[pubsub.Channel][]chan *pubsub.Message
 	locker       *sync.RWMutex
 }
 
 func NewPubSub() *localPubSub {
 	pb := &localPubSub{
 		messageQueue: make(chan *pubsub.Message, 10000),
-		mapChannel:   make(map[pubsub.Topic][]chan *pubsub.Message),
+		mapChannel:   make(map[pubsub.Channel][]chan *pubsub.Message),
 		locker:       new(sync.RWMutex),
 	}
 
@@ -25,20 +29,17 @@ func NewPubSub() *localPubSub {
 	return pb
 }
 
-func (ps *localPubSub) Publish(ctx context.Context, channel pubsub.Topic, data *pubsub.Message) error {
+func (ps *localPubSub) Publish(ctx context.Context, channel pubsub.Channel, data *pubsub.Message) error {
 	data.SetChannel(channel)
 
 	go func() {
-		// defer commons.Recover(ctx)
 		ps.messageQueue <- data
 		log.Println("New event published:", data.String())
-		log.Println("Get data demo:", data.Data())
-
 	}()
 	return nil
 }
 
-func (ps *localPubSub) Subscribe(ctx context.Context, channel pubsub.Topic) (ch <-chan *pubsub.Message, close func()) {
+func (ps *localPubSub) Subscribe(ctx context.Context, channel pubsub.Channel) (ch <-chan *pubsub.Message, close func()) {
 	c := make(chan *pubsub.Message)
 
 	ps.locker.Lock()
@@ -49,8 +50,6 @@ func (ps *localPubSub) Subscribe(ctx context.Context, channel pubsub.Topic) (ch 
 		ps.mapChannel[channel] = []chan *pubsub.Message{c}
 	}
 	ps.locker.Unlock()
-
-	// log.Fatalln("run goroutine....")
 
 	return c, func() {
 		log.Println("Unsubscribe")
@@ -73,6 +72,24 @@ func (ps *localPubSub) Subscribe(ctx context.Context, channel pubsub.Topic) (ch 
 
 func (ps *localPubSub) run() error {
 	log.Println("Pubsub started")
+
+	go func() {
+		for {
+			mess := <-ps.messageQueue
+			log.Println("Message dequeue:", mess)
+
+			if subs, ok := ps.mapChannel[mess.Channel()]; ok {
+				for i := range subs {
+					go func(c chan *pubsub.Message) {
+						c <- mess
+					}(subs[i])
+				}
+			}
+			//else {
+			//	ps.messageQueue <- mess
+			//}
+		}
+	}()
 
 	return nil
 }

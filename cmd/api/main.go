@@ -6,14 +6,12 @@ import (
 	"coffee_api/commons"
 	"coffee_api/configs"
 	__prefix "coffee_api/configs/prefix"
+	"coffee_api/consumers"
 	"coffee_api/db"
 	"coffee_api/helpers"
 	"coffee_api/middleware"
 	bizJwt "coffee_api/middleware/jwt_explore/business"
 	implJwt "coffee_api/middleware/jwt_explore/repository/repo_impl"
-	"coffee_api/pubsub"
-	pblocal "coffee_api/pubsub/pb_local"
-	"coffee_api/subscriber"
 
 	bizAuth "coffee_api/modules/auth/business"
 	implAuth "coffee_api/modules/auth/repository/repo_impl"
@@ -49,8 +47,8 @@ func main() {
 		helpers.Fatal(err)
 	}
 
-	var pb pubsub.Pubsub = pblocal.NewPubSub()
-	appCtx := commons.NewAppContext(db, cfg, pb)
+	appCtx := commons.NewAppContext(db, cfg)
+	consumers.NewCusumnerEngine(*appCtx).Start()
 
 	jwtHandler := bizJwt.NewBusiness(implJwt.NewJwtExploreRepoImpl(*appCtx))
 	apiUpload := restUpload.NewApi(bizUpload.NewBusiness(implUpload.NewUploadRepoImpl(*appCtx)))
@@ -60,10 +58,9 @@ func main() {
 
 	bizShop := bizShop.NewBusiness(implShop.NewShopRepoImpl(*appCtx))
 	__implShopLike := implShopLike.NewShopLikeRepoImpl(*appCtx)
-	apiShopLike := restShopLike.NewApi(bizShopLike.NewBusiness(__implShopLike, bizShop, appCtx.GetPubSub()))
+	apiShopLike := restShopLike.NewApi(bizShopLike.NewBusiness(__implShopLike, bizShop))
 	apiShop := restShop.NewApi(bizShop)
 
-	subscriber.Setup(*appCtx)
 	engine := gin.Default()
 	engine.Use(middleware.AuthRequired(*appCtx, jwtHandler))
 

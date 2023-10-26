@@ -8,6 +8,7 @@ import (
 	"coffee_api/modules/auth/entity"
 	authEntity "coffee_api/modules/auth/entity"
 	userEntity "coffee_api/modules/user/entity"
+	"coffee_api/pubsub"
 	"context"
 	"errors"
 	"fmt"
@@ -26,11 +27,11 @@ func NewAuthRepoImpl(appCtx commons.AppContext) auth.Repository {
 	}
 }
 
-func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO) (*entity.RegisterReponse, error) {
-	r.appCtx.L.Lock()
-	defer r.appCtx.L.Unlock()
+func (impl *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO) (*entity.RegisterReponse, error) {
+	// r.appCtx.L.Lock()
+	// defer r.appCtx.L.Unlock()
 
-	db := r.appCtx.GetDB()
+	db := impl.appCtx.GetDB()
 	db.Begin()
 
 	doc := entity.CreateUser{
@@ -49,7 +50,7 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 			}
 			pId := hashids.ID(doc.Id)
 			uid, _ := hashids.EncodeID(pId)
-			accessToken, err := middleware.GenToken(r.appCtx.Cfg, middleware.JwtPayload{
+			accessToken, err := middleware.GenToken(impl.appCtx.Cfg, middleware.JwtPayload{
 				Id:   string(uid),
 				Role: string(commons.Member),
 			})
@@ -76,13 +77,18 @@ func (r *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO
 			<h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">%s</h2>
 			<p>Regards,<br/>
 			%s </p>
-			`, doc.FullName, r.appCtx.Cfg.ApplicationName, otp, r.appCtx.Cfg.ApplicationName)
+			`, doc.FullName, impl.appCtx.Cfg.ApplicationName, otp, impl.appCtx.Cfg.ApplicationName)
 			to := []string{doc.Email}
 
-			err = r.appCtx.Mailer.SendEmail(subject, content, to, nil, nil, nil)
+			err = impl.appCtx.Mailer.SendEmail(subject, content, to, nil, nil, nil)
 			if err != nil {
 				return nil, err
 			}
+			_ = impl.appCtx.GetPubsub().Publish(ctx, commons.ChanVerifyMailCreated, pubsub.NewMessage(map[string]interface{}{
+				"fullname":    doc.FullName,
+				"email":       doc.Email,
+				"secret_code": otp,
+			}))
 
 			db.Commit()
 			return &resp, nil
