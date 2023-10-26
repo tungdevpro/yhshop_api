@@ -12,4 +12,4 @@ type VerifyMail struct {
 	ExpiredAt  *time.Time `json:"expired_at" gorm:"column:expired_at;"`
 }
 
-func (VerifyMail) TableName() string { return "verify_mail" }
+func (VerifyMail) TableName() string { return "verify_mails" }
