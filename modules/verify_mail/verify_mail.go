@@ -8,7 +8,7 @@ import (
 )
 
 type API interface {
-	CreateMail(context.Context) gin.HandlerFunc
+	CreateMailHandler(context.Context) gin.HandlerFunc
 }
 
 type Business interface {
