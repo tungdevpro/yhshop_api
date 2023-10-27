@@ -72,7 +72,7 @@ func (impl *authRepoImpl) Register(ctx context.Context, req *authEntity.Register
 			if err != nil {
 				return nil, err
 			}
-			_ = impl.appCtx.GetPubsub().Publish(ctx, commons.ChanVerifyMailCreated, pubsub.NewMessage(map[string]interface{}{
+			_ = impl.appCtx.GetPubsub().Publish(ctx, commons.SendMailCreated, pubsub.NewMessage(map[string]interface{}{
 				"fullname":    doc.FullName,
 				"email":       doc.Email,
 				"secret_code": otp,

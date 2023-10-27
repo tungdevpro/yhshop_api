@@ -24,7 +24,7 @@ func NewCusumnerEngine(appCtx commons.AppContext) *consumerEngine {
 }
 
 func (engine *consumerEngine) Start() error {
-	err := engine.startSubTopic(commons.ChanVerifyMailCreated, false, SendOTPEmailAfterRegister(engine.appCtx))
+	err := engine.startSubTopic(commons.SendMailCreated, false, SendOTPEmailAfterRegister(engine.appCtx))
 	if err != nil {
 		return err
 	}
