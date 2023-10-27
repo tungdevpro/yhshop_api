@@ -74,7 +74,7 @@ func main() {
 		{
 			auth.POST(__prefix.Register, apiAuth.RegisterHandler())
 			auth.POST(__prefix.Login, apiAuth.LoginHandler())
-			auth.GET(__prefix.VerifyEmail, apiAuth.VerifyMail())
+			auth.GET(__prefix.VerifyOTP, apiAuth.VerifyOTP())
 		}
 
 		// User handler

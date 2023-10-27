@@ -5,10 +5,10 @@ const (
 	Empty = ""
 
 	// Authentication
-	Auth        = "/auth"
-	Login       = "/login"
-	Register    = "/register"
-	VerifyEmail = "/verify-email"
+	Auth      = "/auth"
+	Login     = "/login"
+	Register  = "/register"
+	VerifyOTP = "/verify-otp"
 
 	// User
 	User    = "/user"

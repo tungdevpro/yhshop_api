@@ -21,5 +21,5 @@ type Repository interface {
 type API interface {
 	LoginHandler() gin.HandlerFunc
 	RegisterHandler() gin.HandlerFunc
-	VerifyMail() gin.HandlerFunc
+	VerifyOTP() gin.HandlerFunc
 }

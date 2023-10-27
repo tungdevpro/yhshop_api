@@ -18,7 +18,7 @@ var (
 	AllowPaths = []string{
 		fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.Register),
 		fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.Login),
-		fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.VerifyEmail),
+		fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.VerifyOTP),
 	}
 )
 
