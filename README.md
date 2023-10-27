@@ -58,3 +58,9 @@ go run cmd/main.go
 1. Manage user tokens
 
 2. Push notification to user (Send notifications to all devices where the user is logged in)
+
+
+### Code response
+> 1: Success
+> -1: Have a error
+> -2: Not verified your account
