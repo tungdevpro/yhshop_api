@@ -22,7 +22,23 @@ func (impl *verifyMail) CreateMail(context context.Context, param entity.VerifyM
 	db := impl.appCtx.GetDB()
 
 	doc := entity.VerifyMail{
-		Email: param.Email,
+		Email:      param.Email,
+		FullName:   param.FullName,
+		SecretCode: param.SecretCode,
+	}
+
+	if err := db.Create(&doc).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (impl *verifyMail) CheckOTPMail(context context.Context, param entity.VerifyMail) error {
+	db := impl.appCtx.GetDB()
+
+	doc := entity.VerifyMail{
+		Email:      param.Email,
+		SecretCode: param.SecretCode,
 	}
 
 	result := db.Where(&doc).First(&doc)
@@ -31,10 +47,5 @@ func (impl *verifyMail) CreateMail(context context.Context, param entity.VerifyM
 		return result.Error
 	}
 
-	doc.FullName = param.FullName
-	doc.SecretCode = param.SecretCode
-	if err := db.Create(&doc).Error; err != nil {
-		return err
-	}
 	return nil
 }

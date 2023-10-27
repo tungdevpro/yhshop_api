@@ -9,4 +9,13 @@ var (
 	ErrPasswordLength        = errors.New("password must be at least 6 characters long")
 	ErrUnauthorized          = errors.New("the account does not exist on the system")
 	ErrFullNameInvalid       = errors.New("invalid string, contains other characters")
+	ErrVerifiedYourAccount   = errors.New("you have not verified your account")
+)
+
+type AuthCode int
+
+var (
+	Success     AuthCode = 1
+	Error       AuthCode = -1
+	NotVerified AuthCode = -4
 )

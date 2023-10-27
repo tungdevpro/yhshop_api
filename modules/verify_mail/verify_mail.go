@@ -17,4 +17,5 @@ type Business interface {
 
 type Repository interface {
 	CreateMail(context.Context, entity.VerifyMail) error
+	CheckOTPMail(context.Context, entity.VerifyMail) error
 }

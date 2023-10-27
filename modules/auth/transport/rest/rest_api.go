@@ -4,8 +4,6 @@ import (
 	"net/http"
 
 	"coffee_api/commons"
-	"coffee_api/commons/mail"
-	"coffee_api/configs"
 	"coffee_api/modules/auth"
 	"coffee_api/modules/auth/entity"
 
@@ -56,25 +54,23 @@ func (api *api) LoginHandler() gin.HandlerFunc {
 			return
 		}
 
+		if !result.IsEmailVerified {
+			ctx.AbortWithStatusJSON(http.StatusForbidden, commons.NewAppError(int(entity.NotVerified), entity.ErrVerifiedYourAccount.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusOK, commons.CreateNewSuccessResp(result, entity.MsgLoginSuccess))
 	}
 }
 
-func (api *api) VerifyMail() gin.HandlerFunc {
+func (api *api) VerifyOTP() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		cfg := configs.NewConfiguration()
-		sender := mail.NewGmailSender(cfg.EmailSenderName, cfg.EmailSenderAddress, cfg.EmailSenderPassword)
-
-		subject := "this is subject"
-		content := `
-			<h1>Hello world</h1>
-			`
-		to := []string{"tungdm@weupgroup.vn"}
-
-		err := sender.SendEmail(subject, content, to, nil, nil, nil)
-		if err != nil {
+		var dto = entity.OTPRequest{}
+		if err := ctx.ShouldBind(&dto); err != nil {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, commons.NewAppError(-1, err.Error()))
+			return
 		}
-		// 		require.NoError(t, err)
+		ctx.JSON(http.StatusOK, commons.CreateNewSuccessResp(dto, entity.MsgLoginSuccess))
+
 	}
 }
