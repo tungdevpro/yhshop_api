@@ -10,6 +10,7 @@ type Repository interface {
 	GetProfile(context.Context)
 	DelUser(context.Context)
 	UpdateProfile(context.Context)
+	ChangeVerifyEmail(context.Context, string) error
 }
 
 type Business interface {

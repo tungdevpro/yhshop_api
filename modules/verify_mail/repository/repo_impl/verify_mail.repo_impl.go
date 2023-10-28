@@ -41,7 +41,7 @@ func (impl *verifyMail) CheckOTPMail(context context.Context, param entity.Verif
 		SecretCode: param.SecretCode,
 	}
 
-	result := db.Where(&doc).First(&doc)
+	result := db.Where(&doc).First(&doc).Update("is_used", 1)
 
 	if result.Error != nil {
 		return result.Error

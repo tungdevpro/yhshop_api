@@ -8,23 +8,10 @@ import (
 )
 
 func (impl *authRepoImpl) VerifyOTP(ctx context.Context, param *entity.OTPRequest) (bool, error) {
-	// db := impl.appCtx.GetDB()
+	err := impl.appCtx.GetPubsub().Publish(ctx, commons.ChanVerifyMailCreated, pubsub.NewMessage(param))
+	if err != nil {
+		return false, err
+	}
 
-	// doc := entity.OTPRequest{
-	// 	Email: param.Email,
-	// }
-
-	// result := db.Where(&doc).Find(&doc)
-	// fmt.Println("result....", result)
-	// if result.Error == nil || result.RowsAffected != 0 {
-	// 	return false, result.Error
-	// }
-
-	// if doc.Otp != param.Otp {
-	// 	return false, entity.ErrOTPNotEqual
-	// }
-
-	impl.appCtx.GetPubsub().Publish(ctx, commons.ChanVerifyMailCreated, pubsub.NewMessage(param))
-
-	return false, nil
+	return true, nil
 }

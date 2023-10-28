@@ -29,7 +29,7 @@ func (engine *consumerEngine) Start() error {
 		return err
 	}
 
-	err = engine.startSubTopic(commons.ChanVerifyMailCreated, true, VerifyOTPEmailAfterRegister(engine.appCtx))
+	err = engine.startSubTopic(commons.ChanVerifyMailCreated, true, VerifyOTPEmailAfterRegister(engine.appCtx), ChangeIsVerifyEmailInUserModel(engine.appCtx))
 	if err != nil {
 		return err
 	}
