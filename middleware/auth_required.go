@@ -1,30 +1,30 @@
 package middleware
 
 import (
-	"coffee_api/commons"
-	"coffee_api/configs/prefix"
-	"coffee_api/helpers"
-	jwtexplore "coffee_api/middleware/jwt_explore"
 	"errors"
 	"fmt"
 	"net/http"
 	"slices"
 
+	"coffee_api/commons"
+	"coffee_api/configs/prefix"
+	"coffee_api/helpers"
+	jwtexplore "coffee_api/middleware/jwt_explore"
+
 	"github.com/gin-gonic/gin"
 	"github.com/indrasaputra/hashids"
 )
 
-var (
-	AllowPaths = []string{
-		fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.Register),
-		fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.Login),
-		fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.VerifyOTP),
-	}
-)
+var allowPaths = []string{
+	fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.Register),
+	fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.Login),
+	fmt.Sprintf("%s%s%s", prefix.V1, prefix.Auth, prefix.VerifyOTP),
+	prefix.SocketIO,
+}
 
 func AuthRequired(appCtx commons.AppContext, bizJwt jwtexplore.Business) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		if slices.Contains(AllowPaths, ctx.FullPath()) {
+		if slices.Contains(allowPaths, ctx.FullPath()) {
 			ctx.Next()
 			return
 		}
