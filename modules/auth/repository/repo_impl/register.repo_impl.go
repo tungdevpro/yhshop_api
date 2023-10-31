@@ -5,7 +5,6 @@ import (
 	"coffee_api/helpers"
 	"coffee_api/middleware"
 	"coffee_api/modules/auth/entity"
-	authEntity "coffee_api/modules/auth/entity"
 	"coffee_api/pubsub"
 	"context"
 	"errors"
@@ -15,7 +14,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (impl *authRepoImpl) Register(ctx context.Context, req *authEntity.RegisterDTO) (*entity.RegisterReponse, error) {
+func (impl *authRepoImpl) Register(ctx context.Context, req *entity.RegisterDTO) (*entity.RegisterReponse, error) {
 	// r.appCtx.L.Lock()
 	// defer r.appCtx.L.Unlock()
 
