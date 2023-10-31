@@ -100,7 +100,7 @@ func main() {
 		v1.GET(__prefix.ListShop, apiShop.ListShopHandler())
 	}
 
-	// startSocketIOServer(engine)
+	startSocketIOServer(engine)
 	if err := engine.Run(fmt.Sprintf(":%s", cfg.Port)); err != nil {
 		helpers.Fatal(err)
 	}
@@ -118,4 +118,6 @@ func startSocketIOServer(engine *gin.Engine) {
 	})
 
 	go server.Serve()
+
+	engine.GET(__prefix.SocketIO, gin.WrapH(server))
 }
