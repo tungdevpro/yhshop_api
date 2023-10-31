@@ -29,4 +29,7 @@ const (
 	// Shipper
 	Shipper     = "/shipper"
 	ListShipper = "/shipers"
+
+	// Socket
+	SocketIO = "/socket.io/*any"
 )
